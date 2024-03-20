@@ -1,0 +1,23 @@
+<h1 class="main-title">Lista de productos</h1>
+
+<div class="container">
+  <div class="card-container">
+    {{#each data}}
+      <div class="card">
+        <div class="card-body">
+          <p><strong>Nombre:</strong> {{this.title}}</p>
+          <p><strong>Descripción:</strong> {{this.description}}</p>
+          <p><strong>Precio:</strong> {{this.price}}</p>
+          <p><strong>Código:</strong> {{this.code}}</p>
+          <p><strong>Stock:</strong> {{this.stock}}</p>
+
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+{{! traer las funciones y metodos de socket.io }}
+<script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
+{{! vincular el archivo de js con la vista de index.handlebars }}
+<script src="js/main.js"></script>

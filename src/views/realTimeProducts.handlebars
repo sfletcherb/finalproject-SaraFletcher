@@ -1,0 +1,83 @@
+<h1 class="main-title">Lista de productos</h1>
+
+<div class="container">
+  <div class="card-container" id="list-products">
+  </div>
+</div>
+
+<form id="product-Form" class="productForm">
+  <div class="row">
+    <div class="col">
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        placeholder="Nombre"
+        name="title"
+        required
+      />
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        placeholder="Descripción"
+        name="description"
+        required
+      />
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        class="form-control"
+        id="price"
+        placeholder="Precio"
+        name="price"
+        required
+      />
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        class="form-control"
+        id="code"
+        placeholder="Código"
+        name="code"
+        required
+      />
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        class="form-control"
+        id="stock"
+        placeholder="Stock"
+        name="stock"
+        required
+      />
+    </div>
+    <div class="col">
+      <select class="form-control" id="estado" name="status" required>
+        <option value="">Select option</option>
+        <option value="true">true</option>
+        <option value="false">false</option>
+      </select>
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Categoría"
+        name="category"
+        required
+      />
+    </div>
+  </div>
+  <button type="submit" class="btn btn-style">Enviar</button>
+</form>
+
+{{! traer las funciones y metodos de socket.io }}
+<script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
+{{! vincular el archivo de js con la vista de index.handlebars }}
+<script src="js/main.js"></script>

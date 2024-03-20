@@ -1,0 +1,53 @@
+<h1 class="main-title">Lista de productos</h1>
+{{#if prevLink}}
+  <a href="{{prevLink}}">Página Anterior</a>
+{{/if}}
+
+{{#if nextLink}}
+  <a href="{{nextLink}}">Página Siguiente</a>
+{{/if}}
+
+<a href="/products?sort=asc&{{queryString}}">Ordenar Ascendente</a>
+<a href="/products?sort=desc&{{queryString}}">Ordenar Descendente</a>
+
+<h2>Categorías</h2>
+<a href="/products?category=store">Store</a>
+<a href="/products?category=Medicamentos">Medicamentos</a>
+
+<h2>Disponibilidad</h2>
+<a href="/products?stockIn={ $gt: 1 }">Disponible</a>
+<a href="/products?stockOut={ $eq: 0 }">No Disponible</a>
+
+<div class="container">
+  <div class="card-container">
+    {{#each payload}}
+      <div class="card">
+        <div class="card-body">
+          <p><strong>Nombre:</strong> {{this.title}}</p>
+          <p><strong>Descripción:</strong> {{this.description}}</p>
+          <p><strong>Precio:</strong> {{this.price}}</p>
+          <p><strong>Código:</strong> {{this.code}}</p>
+          <p><strong>Stock:</strong> {{this.stock}}</p>
+          <p><strong>Status:</strong> {{this.status}}</p>
+          <p><strong>Categoría:</strong> {{this.category}}</p>
+
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+{{#if hasPrevPage}}
+  <a href="/products?page={{prevPage}}">Previous</a>
+{{/if}}
+
+{{#if hasNextPage}}
+  <a href="/products?page={{nextPage}}">Next</a>
+{{/if}}
+
+<p>Page {{page}} of {{totalPages}}</p>
+
+{{! traer las funciones y metodos de socket.io }}
+<script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
+{{! vincular el archivo de js con la vista de index.handlebars }}
+<script src="js/main.js"></script>
