@@ -26,7 +26,6 @@ const addProductInCart = async (idProduct, quantity = 1) => {
 
     if (!existingCart) {
       const newCart = await cartManagerInstance.createCart();
-      console.log(newCart);
       await cartManagerInstance.addProductToCart(
         newCart._id,
         idProduct,
