@@ -1,3 +1,8 @@
+<p>Hola! {{user.first_name}} {{user.last_name}}, bienvenido(a), </p>
+<p>Datos de Usuario:</p>
+<p>Email: {{user.email}}</p>
+<p>Edad: {{user.age}}</p>
+
 <h1 class="main-title">Lista de productos</h1>
 {{#if prevLink}}
   <a href="{{prevLink}}">Página Anterior</a>
@@ -46,6 +51,8 @@
 {{/if}}
 
 <p>Page {{page}} of {{totalPages}}</p>
+
+<a href="/api/sessions/logout" class="btn btn-style">logout</a>
 
 {{! traer las funciones y metodos de socket.io }}
 <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>

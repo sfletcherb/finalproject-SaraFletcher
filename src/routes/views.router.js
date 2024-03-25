@@ -91,10 +91,19 @@ router.get("/products", async (req, res) => {
             req.originalUrl.split("?")[1]
           }`
         : null,
+      user: req.session.user,
     });
   } catch (error) {
     res.status(500).send({ status: "error", message: error.message });
   }
+});
+
+router.get("/register", (req, res) => {
+  res.render("register");
+});
+
+router.get("/login", (req, res) => {
+  res.render("login");
 });
 
 module.exports = router;
