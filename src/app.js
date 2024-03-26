@@ -11,6 +11,7 @@ const productsRouter = require("./routes/products.router.js");
 const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const sessionsRouter = require("./routes/sessions.router.js");
+const cookiesRouter = require("./routes/cookies.router.js");
 require("./database.js");
 const ProductModel = require("./models/products.model.js");
 const MessageModel = require("./models/message.model.js");
@@ -53,32 +54,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
-
-//Cookie Routes:
-/* app.get("/setCookie", (req, res) => {
-  res
-    .cookie("coderCookie", "my first cookie", { maxAge: 10000 })
-    .send("my first cookie!");
-});
-app.get("/getCookie", (req, res) => {
-  res.send(req.cookies); // if I only want a specific cookie req.cookies.nombre_de_la_cookie
-});
-app.get("/deleteCookie", (req, res) => {
-  res.clearCookie("coderCookie").send("Cookie deleted");
-});
-app.get("/signedCookie", (req, res) => {
-  res
-    .cookie("signedCookie", "my first signed cookie", { signed: true })
-    .send("my first signed cookie!");
-});
-app.get("/recoverySignedCookie", (req, res) => {
-  const valueCookie = req.signedCookies.signedCookie; // name of the signed cookie "signedCookie"
-  if (valueCookie) {
-    res.send("recovered cookie");
-  } else {
-    res.send("invalid Cookie");
-  }
-}); */
+app.use("/", cookiesRouter);
 
 // Session Routes:
 /* app.get("/session", (req, res) => {

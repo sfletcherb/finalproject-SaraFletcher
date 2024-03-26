@@ -2,6 +2,7 @@
 <p>Datos de Usuario:</p>
 <p>Email: {{user.email}}</p>
 <p>Edad: {{user.age}}</p>
+<p>Role: {{user.role}}</p>
 
 <h1 class="main-title">Lista de productos</h1>
 {{#if prevLink}}
@@ -52,7 +53,7 @@
 
 <p>Page {{page}} of {{totalPages}}</p>
 
-<a href="/api/sessions/logout" class="btn btn-style">logout</a>
+<a href="/api/sessions/logout" class="btn btn-card">logout</a>
 
 {{! traer las funciones y metodos de socket.io }}
 <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>

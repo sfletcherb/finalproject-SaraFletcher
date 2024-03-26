@@ -3,7 +3,7 @@ const router = express.Router();
 const UserModel = require("../models/user.model.js");
 
 router.post("/", async (req, res) => {
-  const { first_name, last_name, email, password, age } = req.body;
+  const { first_name, last_name, email, password, age, role } = req.body;
   try {
     const userExists = await UserModel.findOne({ email: email });
     if (userExists) {
@@ -16,6 +16,7 @@ router.post("/", async (req, res) => {
       email,
       password,
       age,
+      role,
     });
 
     //Create session
@@ -31,6 +32,10 @@ router.post("/", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
+    if (!email || !password) {
+      return res.status(400).send("Email and password are required");
+    }
+
     const existUser = await UserModel.findOne({ email: email });
     if (existUser) {
       if (existUser.password === password) {
@@ -40,7 +45,16 @@ router.post("/login", async (req, res) => {
           last_name: existUser.last_name,
           email: existUser.email,
           age: existUser.age,
+          role: existUser.role,
         };
+
+        // Validating admin role
+        if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+          req.session.admin = true;
+        } else {
+          req.session.admin = false;
+        }
+
         res.redirect("/products");
       } else {
         res.status(401).send("Password not valid");
@@ -55,7 +69,9 @@ router.post("/login", async (req, res) => {
 
 router.get("/logout", (req, res) => {
   if (req.session.login) {
-    req.session.destroy();
+    req.session.destroy((err) => {
+      if (err) res.send("Error in logout", err);
+    });
   }
   res.redirect("/login");
 });
