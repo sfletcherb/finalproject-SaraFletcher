@@ -56,6 +56,7 @@ app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/", cookiesRouter);
 
+console.log("Nuevo Repo");
 // Session Routes:
 /* app.get("/session", (req, res) => {
   if (req.session.counter) {
