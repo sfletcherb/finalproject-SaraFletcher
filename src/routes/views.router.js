@@ -68,7 +68,7 @@ router.get("/products", async (req, res) => {
 
     const finalResultProductList = productList.docs.map((item) => {
       const { _id, ...rest } = item.toObject();
-      return rest;
+      return { _id, ...rest };
     });
 
     res.render("products", {

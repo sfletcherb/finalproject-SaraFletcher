@@ -32,7 +32,7 @@ class CartManager {
       }
 
       const existProductIndex = existCart.products.findIndex(
-        (p) => p.product.toString() === idProduct
+        (p) => p.product._id.toString() === idProduct
       );
 
       if (existCart && existProductIndex !== -1) {
@@ -53,28 +53,29 @@ class CartManager {
     }
   }
 
-  async updateProductCart(idCart, idProduct, quantity) {
+  async updateProductCart(idCart, idProduct, newQuantity) {
     try {
-      const existingCart = await CartModel.findById(idCart);
+      const existCart = await CartModel.findById(idCart);
 
-      if (!existingCart) {
+      if (!existCart) {
         console.log("Cart not found");
+        return;
       }
 
-      const existingProduct = existingCart.products.findIndex(
-        (p) => p.product.toString() === idProduct
+      const indexProduct = existCart.products.findIndex(
+        (p) => p.product._id.toString() === idProduct
       );
 
-      if (existingProduct !== -1) {
-        existingCart.products[existingProduct].quantity = quantity;
+      if (indexProduct !== -1) {
+        existCart.products[indexProduct].quantity = newQuantity;
       } else {
         console.log("Product not found");
       }
 
-      existingCart.markModified("products");
-      await existingCart.save();
+      existCart.markModified("products");
+      await existCart.save();
       console.log("product updated successfully");
-      return existingCart.products;
+      return existCart.products;
     } catch (error) {
       console.log({ status: "error", message: error.message });
     }
@@ -110,7 +111,7 @@ class CartManager {
       }
 
       const indexProduct = existCart.products.findIndex(
-        (p) => p.product == idProduct
+        (p) => p.product._id.toString() === idProduct
       );
 
       if (indexProduct !== -1) {

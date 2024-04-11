@@ -53,13 +53,13 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
 router.put("/:cid/products/:pid", async (req, res) => {
   try {
-    const quantity = req.body.quantity || 1;
+    const newQuantity = req.body.quantity || 1;
     const idProduct = req.params.pid;
     const idCart = req.params.cid;
     const updateCart = await cartManagerInstance.updateProductCart(
       idCart,
       idProduct,
-      quantity
+      newQuantity
     );
     res.status(200).json(updateCart);
   } catch (error) {
@@ -89,7 +89,11 @@ router.delete("/:cid/products/:pid", async (req, res) => {
       idCart,
       idProduct
     );
-    res.status(200).json(deleteProductInCart);
+    res.status(200).json({
+      status: "success",
+      message: "Product has been deleted",
+      deleteProductInCart,
+    });
   } catch (error) {
     res.status(500).send({ status: "error", message: error.message });
   }
