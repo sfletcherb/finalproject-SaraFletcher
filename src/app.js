@@ -4,14 +4,14 @@ const path = require("path");
 const socket = require("socket.io");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const FileStore = require("session-file-store");
-const fileStore = FileStore(session);
 const MongoStore = require("connect-mongo");
 const productsRouter = require("./routes/products.router.js");
 const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const sessionsRouter = require("./routes/sessions.router.js");
 const cookiesRouter = require("./routes/cookies.router.js");
+const passport = require("passport");
+const initializePassport = require("./config/passport.config.js");
 require("./database.js");
 const ProductModel = require("./models/products.model.js");
 const MessageModel = require("./models/message.model.js");
@@ -40,7 +40,6 @@ app.use(
     secret: "secretCoder",
     resave: true,
     saveUninitialized: true,
-    /* store: new fileStore({ path: "./src/sessions", ttl: 10000, retries: 1 }), */
     store: MongoStore.create({
       mongoUrl:
         "mongodb+srv://saflebri:coderhouse@cluster0.1fc01sx.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0",
@@ -48,6 +47,10 @@ app.use(
     }),
   })
 );
+// Using passport for authentication
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Routes:
 app.use("/api/products", productsRouter);
@@ -55,46 +58,6 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/", cookiesRouter);
-
-console.log("Nuevo Repo");
-// Session Routes:
-/* app.get("/session", (req, res) => {
-  if (req.session.counter) {
-    req.session.counter++;
-    res.send("Welcome to session again for " + req.session.counter + " veces");
-  } else {
-    req.session.counter = 1;
-    res.send("Welcome for visit us");
-  }
-});
-app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (!err) res.send("Closed session");
-    else res.send("There is an error", err);
-  });
-});
-
-app.get("/login", (req, res) => {
-  let { usuario, password } = req.query;
-  if (usuario === "adminCoder@coder.com" && password === "1234") {
-    req.session.user = usuario; // create session
-    req.session.admin = true;
-    res.send("SuccessFul login");
-  } else {
-    res.send("Login error");
-  }
-});
-
-function auth(req, res, next) {
-  if (req.session.admin === true) {
-    return next();
-  }
-  return res.status(403).send("Authorizing error");
-}
-
-app.get("/privado", auth, (req, res) => {
-  res.send("Authorized, you are admin authenticated");
-}); */
 
 //Listen:
 const httpServer = app.listen(PUERTO, () => {

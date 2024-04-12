@@ -1,72 +1,64 @@
 const express = require("express");
 const router = express.Router();
-const UserModel = require("../models/user.model.js");
+const passport = require("passport");
 
-router.post("/", async (req, res) => {
-  const { first_name, last_name, email, password, age, role } = req.body;
-  try {
-    const userExists = await UserModel.findOne({ email: email });
-    if (userExists) {
-      return res.status(400).send("Email already exists");
-    }
-    //Create a new user
-    const newUser = await UserModel.create({
-      first_name: first_name,
-      last_name: last_name,
-      email,
-      password,
-      age,
-      role,
-    });
+//Version for passport
 
-    //Create session
+//Register
+router.post(
+  "/",
+  passport.authenticate("register", {
+    failureRedirect: "/api/sessions/failedregister",
+  }),
+  async (req, res) => {
+    if (!req.user) return res.status(401).send("Password not valid");
+
+    req.session.user = {
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      age: req.user.age,
+      email: req.user.email,
+      role: req.user.role,
+    };
+
     req.session.login = true;
-    req.session.user = { ...newUser._doc };
 
-    res.status(200).send("User created successfully");
-  } catch (error) {
-    res.status(500).send({ status: "error", message: error.message });
+    res.redirect("/products");
   }
+);
+
+router.get("/failedregister", async (req, res) => {
+  res.send("failed registration");
 });
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    if (!email || !password) {
-      return res.status(400).send("Email and password are required");
-    }
+//Login
+router.post(
+  "/login",
+  passport.authenticate("login", {
+    failureRedirect: "/api/sessions/faillogin",
+  }),
+  async (req, res) => {
+    if (!req.user) return res.status(401).send("Password not valid");
 
-    const existUser = await UserModel.findOne({ email: email });
-    if (existUser) {
-      if (existUser.password === password) {
-        req.session.login = true;
-        req.session.user = {
-          first_name: existUser.first_name,
-          last_name: existUser.last_name,
-          email: existUser.email,
-          age: existUser.age,
-          role: existUser.role,
-        };
+    req.session.user = {
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      age: req.user.age,
+      email: req.user.email,
+      role: req.user.role,
+    };
 
-        // Validating admin role
-        if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-          req.session.admin = true;
-        } else {
-          req.session.admin = false;
-        }
+    req.session.login = true;
 
-        res.redirect("/products");
-      } else {
-        res.status(401).send("Password not valid");
-      }
-    } else {
-      res.status(404).send("User not found");
-    }
-  } catch (error) {
-    res.status(500).send({ status: "error", message: error.message });
+    res.redirect("/products");
   }
+);
+
+router.get("/faillogin", async (req, res) => {
+  res.send("failed logging");
 });
 
+//Logout
 router.get("/logout", (req, res) => {
   if (req.session.login) {
     req.session.destroy((err) => {
@@ -75,5 +67,23 @@ router.get("/logout", (req, res) => {
   }
   res.redirect("/login");
 });
+
+// Version for GitHub
+
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {}
+);
+
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user;
+    req.session.login = true;
+    res.redirect("/products");
+  }
+);
 
 module.exports = router;
