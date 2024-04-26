@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ProductModel = require("../models/products.model.js");
+const passport = require("passport");
 
 router.get("/", async (req, res) => {
   try {
@@ -91,7 +92,7 @@ router.get("/products", async (req, res) => {
             req.originalUrl.split("?")[1]
           }`
         : null,
-      user: req.session.user,
+      user: req.user,
     });
   } catch (error) {
     res.status(500).send({ status: "error", message: error.message });

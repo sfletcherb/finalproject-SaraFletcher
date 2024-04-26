@@ -9,7 +9,6 @@ const productsRouter = require("./routes/products.router.js");
 const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const sessionsRouter = require("./routes/sessions.router.js");
-const cookiesRouter = require("./routes/cookies.router.js");
 const passport = require("passport");
 const initializePassport = require("./config/passport.config.js");
 require("./database.js");
@@ -33,31 +32,17 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-const secretKey = "coderHouse";
-app.use(cookieParser(secretKey));
-app.use(
-  session({
-    secret: "secretCoder",
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({
-      mongoUrl:
-        "mongodb+srv://saflebri:coderhouse@cluster0.1fc01sx.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0",
-      ttl: 100,
-    }),
-  })
-);
+app.use(cookieParser());
+
 // Using passport for authentication
 initializePassport();
 app.use(passport.initialize());
-app.use(passport.session());
 
 //Routes:
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
-app.use("/", cookiesRouter);
 
 //Listen:
 const httpServer = app.listen(PUERTO, () => {

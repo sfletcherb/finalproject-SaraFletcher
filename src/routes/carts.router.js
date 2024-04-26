@@ -23,8 +23,8 @@ router.post("/", async (req, res) => {
 
 router.get("/:cid", async (req, res) => {
   try {
-    const idCart = req.params.cid;
-    const cartById = await cartManagerInstance.getProductById(idCart);
+    const cartId = req.params.cid;
+    const cartById = await cartManagerInstance.getProductById(cartId);
     if (!cartById) {
       res.status(404).json({ error: "cart not found" });
     }
@@ -36,12 +36,12 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/:cid/product/:pid", async (req, res) => {
   try {
-    const idCart = req.params.cid;
+    const cartId = req.params.cid;
     const idProduct = req.params.pid;
     const quantity = req.body.quantity || 1;
 
     const upDateCart = await cartManagerInstance.addProductToCart(
-      idCart,
+      cartId,
       idProduct,
       quantity
     );
@@ -55,9 +55,9 @@ router.put("/:cid/products/:pid", async (req, res) => {
   try {
     const newQuantity = req.body.quantity || 1;
     const idProduct = req.params.pid;
-    const idCart = req.params.cid;
+    const cartId = req.params.cid;
     const updateCart = await cartManagerInstance.updateProductCart(
-      idCart,
+      cartId,
       idProduct,
       newQuantity
     );
@@ -69,11 +69,11 @@ router.put("/:cid/products/:pid", async (req, res) => {
 
 router.put("/:cid", async (req, res) => {
   try {
-    const idCart = req.params.cid;
+    const cartId = req.params.cid;
     const newArray = req.body;
 
     const updateCartWithArray =
-      await cartManagerInstance.updateProductCartWithArray(idCart, newArray);
+      await cartManagerInstance.updateProductCartWithArray(cartId, newArray);
     res.status(200).json(updateCartWithArray);
   } catch (error) {
     res.status(500).send({ status: "error", message: error.message });
@@ -82,11 +82,11 @@ router.put("/:cid", async (req, res) => {
 
 router.delete("/:cid/products/:pid", async (req, res) => {
   try {
-    const idCart = req.params.cid;
+    const cartId = req.params.cid;
     const idProduct = req.params.pid;
 
     const deleteProductInCart = await cartManagerInstance.deleteProductCart(
-      idCart,
+      cartId,
       idProduct
     );
     res.status(200).json({
@@ -101,10 +101,10 @@ router.delete("/:cid/products/:pid", async (req, res) => {
 
 router.delete("/:cid", async (req, res) => {
   try {
-    const idCart = req.params.cid;
+    const cartId = req.params.cid;
 
     const deleteAllProductsInCart =
-      await cartManagerInstance.deleteAllProductsCart(idCart);
+      await cartManagerInstance.deleteAllProductsCart(cartId);
     res.status(200).json(deleteAllProductsInCart);
   } catch (error) {
     res.status(500).send({ status: "error", message: error.message });

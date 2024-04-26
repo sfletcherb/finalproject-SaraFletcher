@@ -1,8 +1,79 @@
 const socket = io();
-
 console.log("Connected to socket");
 
 socket.emit("greeting", "Hello, connected from main.js");
+
+// Script for add product to cart in products view
+
+document.addEventListener("DOMContentLoaded", async function () {
+  let cartId = null; // save id of cart
+
+  try {
+    // Make a GET request to retrieve the customer's cart.
+    const getCartResponse = await fetch("/api/carts");
+
+    if (getCartResponse.ok) {
+      // Extract the cart ID if it exists
+      const cartData = await getCartResponse.json();
+      if (cartData?._id) {
+        cartId = cartData._id;
+      }
+    } else {
+      console.error("Error retrieving the customer's cart.");
+    }
+  } catch (error) {
+    console.error("Error communicating with the server:", error);
+  }
+
+  const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
+
+  addToCartButtons.forEach((button) => {
+    button.addEventListener("click", async function () {
+      const productId = button.getAttribute("data-product-id");
+      const quantity = 1;
+
+      try {
+        if (!cartId) {
+          // If cart is not exist, create a new one
+          const createCartResponse = await fetch("/api/carts", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (createCartResponse.ok) {
+            const newCartData = await createCartResponse.json();
+            cartId = newCartData._id; // Update cartId
+          } else {
+            console.error("Error creating cart");
+            return;
+          }
+        }
+
+        // Utilize the existing cart ID in the request to add the product
+        const response = await fetch(
+          `/api/carts/${cartId}/product/${productId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ quantity: quantity }),
+          }
+        );
+
+        if (response.ok) {
+          console.log("Product added successfully");
+        } else {
+          console.error("Error adding product");
+        }
+      } catch (error) {
+        console.error("Error communicating with the server:", error);
+      }
+    });
+  });
+});
 
 // Create Chat
 

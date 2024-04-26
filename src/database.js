@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const configObject = require("./config/dotenv.js");
+
+const { mongo_url } = configObject;
 
 mongoose
-  .connect(
-    "mongodb+srv://saflebri:coderhouse@cluster0.1fc01sx.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0"
-  )
+  .connect(mongo_url)
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.log("Failed to connect to MongoDB", error));
 

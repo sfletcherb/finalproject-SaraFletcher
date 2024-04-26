@@ -29,6 +29,7 @@
     {{#each payload}}
       <div class="card">
         <div class="card-body">
+          <p><strong>Id:</strong> {{this._id}}</p>
           <p><strong>Nombre:</strong> {{this.title}}</p>
           <p><strong>Descripción:</strong> {{this.description}}</p>
           <p><strong>Precio:</strong> {{this.price}}</p>
@@ -36,7 +37,9 @@
           <p><strong>Stock:</strong> {{this.stock}}</p>
           <p><strong>Status:</strong> {{this.status}}</p>
           <p><strong>Categoría:</strong> {{this.category}}</p>
-          <button> Agregar al Carrito </button>
+          <button class="add-to-cart-btn" data-product-id="{{this._id}}">
+            Agregar al Carrito
+          </button>
         </div>
       </div>
     {{/each}}
@@ -57,5 +60,5 @@
 
 {{! traer las funciones y metodos de socket.io }}
 <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
-{{! vincular el archivo de js con la vista de index.handlebars }}
+{{! vincular el archivo de js con la vista de products.handlebars }}
 <script src="js/main.js"></script>

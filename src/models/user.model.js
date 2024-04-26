@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const cartManagerInstance = require("../controllers/cartManager.js");
 
 const userSchema = new mongoose.Schema({
   first_name: {
@@ -28,6 +29,24 @@ const userSchema = new mongoose.Schema({
     default: "user",
     required: true,
   },
+  cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "carts",
+  },
+});
+
+userSchema.pre("save", async function (next) {
+  if (this.role === "user" && !this.cart) {
+    try {
+      const cart = await cartManagerInstance.createCart();
+      this.cart = cart._id;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    next();
+  }
 });
 
 const UserModel = mongoose.model("users", userSchema);

@@ -23,9 +23,9 @@ class CartManager {
     }
   }
 
-  async addProductToCart(idCart, idProduct, quantity) {
+  async addProductToCart(cartId, idProduct, quantity) {
     try {
-      const existCart = await CartModel.findById(idCart);
+      const existCart = await CartModel.findById(cartId);
       if (!existCart) {
         console.log("Cart not found");
         return;
@@ -53,9 +53,9 @@ class CartManager {
     }
   }
 
-  async updateProductCart(idCart, idProduct, newQuantity) {
+  async updateProductCart(cartId, idProduct, newQuantity) {
     try {
-      const existCart = await CartModel.findById(idCart);
+      const existCart = await CartModel.findById(cartId);
 
       if (!existCart) {
         console.log("Cart not found");
@@ -81,9 +81,9 @@ class CartManager {
     }
   }
 
-  async updateProductCartWithArray(idCart, data) {
+  async updateProductCartWithArray(cartId, data) {
     try {
-      const existingCart = await CartModel.findById(idCart);
+      const existingCart = await CartModel.findById(cartId);
 
       if (!existingCart) {
         console.log("Cart not found");
@@ -101,9 +101,9 @@ class CartManager {
     }
   }
 
-  async deleteProductCart(idCart, idProduct) {
+  async deleteProductCart(cartId, idProduct) {
     try {
-      const existCart = await CartModel.findById(idCart);
+      const existCart = await CartModel.findById(cartId);
 
       if (!existCart) {
         console.log("Cart not found");
@@ -127,9 +127,9 @@ class CartManager {
     }
   }
 
-  async deleteAllProductsCart(idCart) {
+  async deleteAllProductsCart(cartId) {
     try {
-      const existCart = await CartModel.findById(idCart);
+      const existCart = await CartModel.findById(cartId);
 
       if (!existCart) {
         console.log("Cart not found");
