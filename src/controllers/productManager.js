@@ -1,97 +1,94 @@
-const ProductModel = require("../models/products.model.js");
+const productServiceInstance = require("../services/products.service.js");
 
-class ProductManager {
-  async addProduct(dataProducts) {
+class ProductController {
+  async getAllProducts(req, res) {
+    const limit = req.query.limit;
+
     try {
-      const {
-        title,
-        description,
-        price,
-        img,
-        code,
-        stock,
-        category,
-        status,
-        thumbnail,
-      } = dataProducts;
-
-      const codeExist = await ProductModel.findOne({ code: code });
-      if (codeExist) {
-        throw new Error("The code already exists");
-      }
-
-      const newProduct = new ProductModel({
-        title,
-        description,
-        price,
-        img: "sin imagen",
-        code,
-        stock,
-        category,
-        status,
-        thumbnail: thumbnail || [],
-      });
-
-      await newProduct.save();
-    } catch (error) {
-      console.log("couldn't add product", error);
-    }
-  }
-
-  async getProductById(id) {
-    try {
-      const findId = await ProductModel.findById(id);
-
-      if (!findId) {
-        console.log("Product not found");
-        return null;
+      const data = await productServiceInstance.getAllProducts();
+      if (limit && !isNaN(parseInt(limit))) {
+        res.json(data.slice(0, limit));
       } else {
-        console.log("Product founded");
-        return findId;
+        res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Couldn't find product", error);
+      res.status(500).send({ status: "error", message: error.message });
     }
   }
 
-  async updateProduct(id, changes) {
-    try {
-      const existProduct = await ProductModel.findById(id);
-      if (!existProduct) {
-        throw new Error("Couldn't find product");
-      }
-      if ("id" in changes) {
-        throw new Error("ID cannot be updated");
-      }
-      if (changes.code && changes.code !== existProduct.id) {
-        const codeExist = await ProductModel.exists({ code: changes.code });
-        if (codeExist) {
-          throw new Error("Code already exists in another product");
-        }
-      }
+  async getProductById(req, res) {
+    const productId = req.params.pid;
 
-      await ProductModel.findByIdAndUpdate(id, changes);
+    try {
+      const productById = await productServiceInstance.getProductById(
+        productId
+      );
+
+      if (!productById) {
+        res.status(404).json({ error: "Product not found" });
+      }
+      res.status(200).json(productById);
     } catch (error) {
-      console.log("Couldn't update product", error);
+      res.status(500).send({ status: "error", message: error.message });
     }
   }
 
-  async deleteProduct(id) {
+  async addProduct(req, res) {
+    let newProduct = req.body;
     try {
-      const existProduct = await ProductModel.findById(id);
-      if (!existProduct) {
-        throw new Error("Couldn't find product");
+      await productServiceInstance.addProduct(newProduct);
+      res
+        .status(200)
+        .send({ status: "success", message: "Product added successfully" });
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
+    }
+  }
+
+  async updateProduct(req, res) {
+    const productId = req.params.pid;
+    const newChanges = req.body;
+
+    try {
+      const productById = await productServiceInstance.getProductById(
+        productId
+      );
+      if (!productById) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      if ("id" in newChanges) {
+        return res.status(400).json({ error: "ID cannot be updated" });
       }
 
-      await ProductModel.findByIdAndDelete(id);
-      console.log("Product deleted");
+      await productServiceInstance.updateProduct(productId, newChanges);
+      res
+        .status(200)
+        .send({ status: "success", message: "Product updated successfully" });
     } catch (error) {
-      console.log("Couldn't delete product", error);
-      throw new Error("Couldn't delete product", error);
+      res.status(500).send({ status: "error", message: error.message });
+    }
+  }
+
+  async deleteProduct(req, res) {
+    const productId = req.params.pid;
+    try {
+      const productById = await productServiceInstance.getProductById(
+        productId
+      );
+      if (!productById) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      await productServiceInstance.deleteProduct(productId);
+      res
+        .status(200)
+        .send({ status: "success", message: "Product deleted successfully" });
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
     }
   }
 }
 
-const productManagerInstance = new ProductManager();
+const productControllerInstance = new ProductController();
 
-module.exports = productManagerInstance;
+module.exports = productControllerInstance;

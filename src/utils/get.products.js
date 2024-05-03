@@ -1,10 +1,10 @@
-const productManagerInstance = require("../controllers/productManager.js");
+const productControllerInstance = require("../controllers/productManager.js");
 const cartManagerInstance = require("../controllers/cartManager.js");
 const CartModel = require("../models/carts.model.js");
 
 const deleteProduct = async (id) => {
   try {
-    await productManagerInstance.deleteProduct(id);
+    await productControllerInstance.deleteProduct(id);
   } catch (error) {
     console.log("Error reading file", error);
     throw error;
@@ -13,7 +13,7 @@ const deleteProduct = async (id) => {
 
 const addProduct = async (data) => {
   try {
-    await productManagerInstance.addProduct(data);
+    await productControllerInstance.addProduct(data);
   } catch (error) {
     console.log("Error reading file", error);
     throw error;
