@@ -1,150 +1,119 @@
-const CartModel = require("../models/carts.model.js");
+const cartServiceInstance = require("../services/carts.service.js");
 
-class CartManager {
-  async createCart() {
+class CartController {
+  async createCart(req, res) {
     try {
-      const cart = new CartModel({
-        products: [],
+      const cart = await cartServiceInstance.createCart();
+      res.status(200).json(cart);
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
+    }
+  }
+
+  async getAllCarts(req, res) {
+    const limit = req.query.limit;
+
+    try {
+      const data = await cartServiceInstance.getAllCarts();
+      if (limit && !isNaN(parseInt(limit))) {
+        res.json(data.slice(0, limit));
+      } else {
+        res.status(200).json(data);
+      }
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
+    }
+  }
+
+  async getCartById(req, res) {
+    const cartId = req.params.cid;
+    try {
+      const cartById = await cartServiceInstance.getCartById(cartId);
+      if (!cartById) {
+        res.status(404).json({ error: "cart not found" });
+      }
+      res.status(200).json(cartById);
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
+    }
+  }
+
+  async addProductToCart(req, res) {
+    try {
+      const cartId = req.params.cid;
+      const idProduct = req.params.pid;
+      const quantity = req.body.quantity || 1;
+
+      const upDateCart = await cartServiceInstance.addProductToCart(
+        cartId,
+        idProduct,
+        quantity
+      );
+      res.status(200).json(upDateCart);
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
+    }
+  }
+
+  async updateProductCart(req, res) {
+    const newQuantity = req.body.quantity || 1;
+    const idProduct = req.params.pid;
+    const cartId = req.params.cid;
+    try {
+      const updateCart = await cartServiceInstance.updateProductCart(
+        cartId,
+        idProduct,
+        newQuantity
+      );
+      res.status(200).json(updateCart);
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
+    }
+  }
+
+  async updateProductCartWithArray(req, res) {
+    const cartId = req.params.cid;
+    const newArray = req.body;
+    try {
+      const updateCartWithArray =
+        await cartServiceInstance.updateProductCartWithArray(cartId, newArray);
+      res.status(200).json(updateCartWithArray);
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
+    }
+  }
+
+  async deleteProductCart(req, res) {
+    const cartId = req.params.cid;
+    const idProduct = req.params.pid;
+
+    try {
+      const deleteProductInCart = await cartServiceInstance.deleteProductCart(
+        cartId,
+        idProduct
+      );
+      res.status(200).json({
+        status: "success",
+        message: "Product has been deleted",
+        deleteProductInCart,
       });
-
-      await cart.save();
-      return cart;
     } catch (error) {
-      console.log("couldn't create cart", error);
+      res.status(500).send({ status: "error", message: error.message });
     }
   }
 
-  async getProductById(id) {
+  async deleteAllProductsCart(req, res) {
+    const cartId = req.params.cid;
     try {
-      const cartById = await CartModel.findById(id);
-      return cartById.products;
+      const deleteAllProductsInCart =
+        await cartServiceInstance.deleteAllProductsCart(cartId);
+      res.status(200).json(deleteAllProductsInCart);
     } catch (error) {
-      console.log("Couldn't find cart", error);
-    }
-  }
-
-  async addProductToCart(cartId, idProduct, quantity) {
-    try {
-      const existCart = await CartModel.findById(cartId);
-      if (!existCart) {
-        console.log("Cart not found");
-        return;
-      }
-
-      const existProductIndex = existCart.products.findIndex(
-        (p) => p.product._id.toString() === idProduct
-      );
-
-      if (existCart && existProductIndex !== -1) {
-        existCart.products[existProductIndex].quantity += quantity;
-      } else {
-        existCart.products.push({
-          product: idProduct,
-          quantity,
-        });
-      }
-      // When cart is modified, we need to use .markModified
-      existCart.markModified("products");
-      await existCart.save();
-      console.log("product added to cart");
-      return existCart.products;
-    } catch (error) {
-      console.log({ status: "error", message: error.message });
-    }
-  }
-
-  async updateProductCart(cartId, idProduct, newQuantity) {
-    try {
-      const existCart = await CartModel.findById(cartId);
-
-      if (!existCart) {
-        console.log("Cart not found");
-        return;
-      }
-
-      const indexProduct = existCart.products.findIndex(
-        (p) => p.product._id.toString() === idProduct
-      );
-
-      if (indexProduct !== -1) {
-        existCart.products[indexProduct].quantity = newQuantity;
-      } else {
-        console.log("Product not found");
-      }
-
-      existCart.markModified("products");
-      await existCart.save();
-      console.log("product updated successfully");
-      return existCart.products;
-    } catch (error) {
-      console.log({ status: "error", message: error.message });
-    }
-  }
-
-  async updateProductCartWithArray(cartId, data) {
-    try {
-      const existingCart = await CartModel.findById(cartId);
-
-      if (!existingCart) {
-        console.log("Cart not found");
-        return null;
-      }
-
-      existingCart.products.push(...data);
-
-      existingCart.markModified("products");
-      await existingCart.save();
-      console.log("product updated successfully with new array");
-      return existingCart.products;
-    } catch (error) {
-      console.log({ status: "error", message: error.message });
-    }
-  }
-
-  async deleteProductCart(cartId, idProduct) {
-    try {
-      const existCart = await CartModel.findById(cartId);
-
-      if (!existCart) {
-        console.log("Cart not found");
-        return;
-      }
-
-      const indexProduct = existCart.products.findIndex(
-        (p) => p.product._id.toString() === idProduct
-      );
-
-      if (indexProduct !== -1) {
-        existCart.products.splice(indexProduct, 1);
-        await existCart.save();
-        console.log("product delected successfully from cart");
-        return existCart;
-      } else {
-        console.log("Product does not exist in cart");
-      }
-    } catch (error) {
-      console.log("error deleting", error.message);
-    }
-  }
-
-  async deleteAllProductsCart(cartId) {
-    try {
-      const existCart = await CartModel.findById(cartId);
-
-      if (!existCart) {
-        console.log("Cart not found");
-      } else {
-        existCart.products = [];
-        await existCart.save();
-        console.log("All products have been deleted in cart");
-        return existCart;
-      }
-    } catch (error) {
-      console.log("error deleting", error.message);
+      res.status(500).send({ status: "error", message: error.message });
     }
   }
 }
 
-const cartManagerInstance = new CartManager();
+const cartControllerInstance = new CartController();
 
-module.exports = cartManagerInstance;
+module.exports = cartControllerInstance;
