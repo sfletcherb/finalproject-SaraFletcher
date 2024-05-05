@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const cartControllerInstance = require("../controllers/cartManager.js");
+const cartServiceInstance = require("../services/carts.service.js");
 
 const userSchema = new mongoose.Schema({
   first_name: {
@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
   if (this.role === "user" && !this.cart) {
     try {
-      const cart = await cartControllerInstance.createCart();
+      const cart = await cartServiceInstance.createCart();
       this.cart = cart._id;
       next();
     } catch (error) {
