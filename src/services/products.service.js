@@ -4,6 +4,7 @@ class ProductService {
   async getAllProducts() {
     try {
       const data = await ProductModel.find();
+      console.log(data);
       return data;
     } catch (error) {
       throw new Error(error.message);
