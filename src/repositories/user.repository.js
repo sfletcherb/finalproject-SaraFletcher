@@ -1,7 +1,7 @@
 const UserModel = require("../models/user.model.js");
 const { createHash, isValidPassword } = require("../utils/hashbcrypt.js");
 
-class UserService {
+class UserRepository {
   async userRegister(data) {
     const { first_name, last_name, email, age, password, role } = data;
 
@@ -45,5 +45,5 @@ class UserService {
   }
 }
 
-const userServiceInstance = new UserService();
-module.exports = userServiceInstance;
+const userRepositoryInstance = new UserRepository();
+module.exports = userRepositoryInstance;

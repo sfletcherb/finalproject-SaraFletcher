@@ -1,4 +1,4 @@
-const userServiceInstance = require("../services/user.service.js");
+const userRepositoryInstance = require("../repositories/user.repository.js");
 const generateToken = require("../utils/jsonwebtoken.js");
 
 class UserController {
@@ -6,7 +6,9 @@ class UserController {
     let userData = req.body;
 
     try {
-      const newUserRegister = await userServiceInstance.userRegister(userData);
+      const newUserRegister = await userRepositoryInstance.userRegister(
+        userData
+      );
 
       // Create token
       const token = generateToken({ id: newUserRegister._id });
@@ -23,7 +25,7 @@ class UserController {
     const { email, password } = req.body;
 
     try {
-      const user = await userServiceInstance.userLogin(email, password);
+      const user = await userRepositoryInstance.userLogin(email, password);
       const token = generateToken({
         first_name: user.first_name,
         last_name: user.last_name,

@@ -1,10 +1,10 @@
 const { response } = require("express");
-const cartServiceInstance = require("../services/carts.service.js");
+const cartRepositoryInstance = require("../repositories/carts.repository.js");
 
 class CartController {
   async createCart(req, res) {
     try {
-      const cart = await cartServiceInstance.createCart();
+      const cart = await cartRepositoryInstance.createCart();
       res.status(200).json(cart);
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
@@ -15,7 +15,7 @@ class CartController {
     const limit = req.query.limit;
 
     try {
-      const data = await cartServiceInstance.getAllCarts();
+      const data = await cartRepositoryInstance.getAllCarts();
       if (limit && !isNaN(parseInt(limit))) {
         res.json(data.slice(0, limit));
       } else {
@@ -29,7 +29,7 @@ class CartController {
   async getCartById(req, res) {
     const cartId = req.params.cid;
     try {
-      const cartById = await cartServiceInstance.getCartById(cartId);
+      const cartById = await cartRepositoryInstance.getCartById(cartId);
       if (!cartById) {
         res.status(404).json({ error: "cart not found" });
       }
@@ -50,7 +50,7 @@ class CartController {
           .status(403)
           .send({ status: "error", message: "Access denied" });
       }
-      const upDateCart = await cartServiceInstance.addProductToCart(
+      const upDateCart = await cartRepositoryInstance.addProductToCart(
         cartId,
         idProduct,
         quantity
@@ -66,7 +66,7 @@ class CartController {
     const idProduct = req.params.pid;
     const cartId = req.params.cid;
     try {
-      const updateCart = await cartServiceInstance.updateProductCart(
+      const updateCart = await cartRepositoryInstance.updateProductCart(
         cartId,
         idProduct,
         newQuantity
@@ -82,7 +82,10 @@ class CartController {
     const newArray = req.body;
     try {
       const updateCartWithArray =
-        await cartServiceInstance.updateProductCartWithArray(cartId, newArray);
+        await cartRepositoryInstance.updateProductCartWithArray(
+          cartId,
+          newArray
+        );
       res.status(200).json(updateCartWithArray);
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
@@ -94,10 +97,8 @@ class CartController {
     const idProduct = req.params.pid;
 
     try {
-      const deleteProductInCart = await cartServiceInstance.deleteProductCart(
-        cartId,
-        idProduct
-      );
+      const deleteProductInCart =
+        await cartRepositoryInstance.deleteProductCart(cartId, idProduct);
       res.status(200).json({
         status: "success",
         message: "Product has been deleted",
@@ -112,7 +113,7 @@ class CartController {
     const cartId = req.params.cid;
     try {
       const deleteAllProductsInCart =
-        await cartServiceInstance.deleteAllProductsCart(cartId);
+        await cartRepositoryInstance.deleteAllProductsCart(cartId);
       res.status(200).json(deleteAllProductsInCart);
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });

@@ -1,6 +1,6 @@
 const ProductModel = require("../models/products.model.js");
 
-class ProductService {
+class ProductRepository {
   async getAllProducts() {
     try {
       const data = await ProductModel.find();
@@ -78,5 +78,5 @@ class ProductService {
   }
 }
 
-const productServiceInstance = new ProductService();
-module.exports = productServiceInstance;
+const productRepositoryInstance = new ProductRepository();
+module.exports = productRepositoryInstance;

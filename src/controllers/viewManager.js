@@ -1,9 +1,9 @@
-const viewsServiceInstance = require("../services/views.service.js");
+const viewsRepositoryInstance = require("../repositories/views.repository.js");
 
 class ViewsController {
   async indexView(req, res) {
     try {
-      const data = await viewsServiceInstance.dataView();
+      const data = await viewsRepositoryInstance.dataView();
 
       const newArray = data.map((p) => {
         return {
@@ -70,7 +70,7 @@ class ViewsController {
         sortQuery.price = 1;
       }
 
-      const productList = await viewsServiceInstance.products(
+      const productList = await viewsRepositoryInstance.products(
         query,
         limit,
         page,

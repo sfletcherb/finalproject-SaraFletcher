@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const cartServiceInstance = require("../services/carts.service.js");
+const cartServiceInstance = require("../repositories/carts.repository.js");
 
 const userSchema = new mongoose.Schema({
   first_name: {

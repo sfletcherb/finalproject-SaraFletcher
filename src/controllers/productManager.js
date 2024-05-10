@@ -1,11 +1,11 @@
-const productServiceInstance = require("../services/products.service.js");
+const productRepositoryInstance = require("../repositories/products.repository.js");
 
 class ProductController {
   async getAllProducts(req, res) {
     const limit = req.query.limit;
 
     try {
-      const data = await productServiceInstance.getAllProducts();
+      const data = await productRepositoryInstance.getAllProducts();
       if (limit && !isNaN(parseInt(limit))) {
         res.json(data.slice(0, limit));
       } else {
@@ -20,7 +20,7 @@ class ProductController {
     const productId = req.params.pid;
 
     try {
-      const productById = await productServiceInstance.getProductById(
+      const productById = await productRepositoryInstance.getProductById(
         productId
       );
 
@@ -36,7 +36,7 @@ class ProductController {
   async addProduct(req, res) {
     let newProduct = req.body;
     try {
-      await productServiceInstance.addProduct(newProduct);
+      await productRepositoryInstance.addProduct(newProduct);
       res
         .status(200)
         .send({ status: "success", message: "Product added successfully" });
@@ -50,7 +50,7 @@ class ProductController {
     const newChanges = req.body;
 
     try {
-      const productById = await productServiceInstance.getProductById(
+      const productById = await productRepositoryInstance.getProductById(
         productId
       );
       if (!productById) {
@@ -60,7 +60,7 @@ class ProductController {
         return res.status(400).json({ error: "ID cannot be updated" });
       }
 
-      await productServiceInstance.updateProduct(productId, newChanges);
+      await productRepositoryInstance.updateProduct(productId, newChanges);
       res
         .status(200)
         .send({ status: "success", message: "Product updated successfully" });
@@ -72,14 +72,14 @@ class ProductController {
   async deleteProduct(req, res) {
     const productId = req.params.pid;
     try {
-      const productById = await productServiceInstance.getProductById(
+      const productById = await productRepositoryInstance.getProductById(
         productId
       );
       if (!productById) {
         return res.status(404).json({ error: "Product not found" });
       }
 
-      await productServiceInstance.deleteProduct(productId);
+      await productRepositoryInstance.deleteProduct(productId);
       res
         .status(200)
         .send({ status: "success", message: "Product deleted successfully" });

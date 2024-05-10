@@ -1,6 +1,6 @@
 const ProductModel = require("../models/products.model.js");
 
-class ViewsService {
+class ViewsRepository {
   async dataView() {
     try {
       const data = await ProductModel.find();
@@ -24,5 +24,5 @@ class ViewsService {
   }
 }
 
-const viewsServiceInstance = new ViewsService();
-module.exports = viewsServiceInstance;
+const viewsRepositoryInstance = new ViewsRepository();
+module.exports = viewsRepositoryInstance;
