@@ -1,8 +1,8 @@
-<p>Hola! {{user.first_name}} {{user.last_name}}, bienvenido(a), </p>
+<p>Hola! {{user._doc.first_name}} {{user._doc.last_name}}, bienvenido(a), </p>
 <p>Datos de Usuario:</p>
-<p>Email: {{user.email}}</p>
-<p>Edad: {{user.age}}</p>
-<p>Role: {{user.role}}</p>
+<p>Email: {{user._doc.email}}</p>
+<p>Edad: {{user._doc.age}}</p>
+<p>Role: {{user._doc.role}}</p>
 
 <h1 class="main-title">Lista de productos</h1>
 {{#if prevLink}}
@@ -26,6 +26,7 @@
 
 <div class="container">
   <div class="card-container">
+
     {{#each payload}}
       <div class="card">
         <div class="card-body">
@@ -37,7 +38,11 @@
           <p><strong>Stock:</strong> {{this.stock}}</p>
           <p><strong>Status:</strong> {{this.status}}</p>
           <p><strong>Categoría:</strong> {{this.category}}</p>
-          <button class="add-to-cart-btn" data-product-id="{{this._id}}">
+          <button
+            class="add-to-cart-btn"
+            data-product-id="{{this._id}}"
+            data-product-role={{../user._doc.role}}
+          >
             Agregar al Carrito
           </button>
         </div>

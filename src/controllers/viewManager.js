@@ -27,10 +27,20 @@ class ViewsController {
   }
 
   async realTimeProducts(req, res) {
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .send({ status: "error", message: "Access denied" });
+    }
     res.render("realtimeproducts");
   }
 
   async chat(req, res) {
+    if (req.user.role !== "user") {
+      return res
+        .status(403)
+        .send({ status: "error", message: "Access denied" });
+    }
     res.render("chat");
   }
 
@@ -72,6 +82,8 @@ class ViewsController {
         return { _id, ...rest };
       });
 
+      const user = Object.assign({}, req.user);
+
       res.render("products", {
         status: finalResultProductList || productList ? "success" : "error",
         payload: finalResultProductList,
@@ -92,7 +104,7 @@ class ViewsController {
               req.originalUrl.split("?")[1]
             }`
           : null,
-        user: req.user,
+        user: user,
       });
     } catch (error) {
       res.status(500).send({

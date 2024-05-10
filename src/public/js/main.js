@@ -30,7 +30,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   addToCartButtons.forEach((button) => {
     button.addEventListener("click", async function () {
       const productId = button.getAttribute("data-product-id");
+      const roleType = button.getAttribute("data-product-role");
       const quantity = 1;
+
+      if (roleType !== "user") {
+        console.log("Access denied");
+        button.disabled = true;
+        return;
+      }
 
       try {
         if (!cartId) {
