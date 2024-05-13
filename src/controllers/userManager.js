@@ -53,7 +53,8 @@ class UserController {
     const userData = new UserDTO(
       req.user.first_name,
       req.user.last_name,
-      req.user.role
+      req.user.role,
+      req.user.cart
     );
 
     res.status(200).json(userData);

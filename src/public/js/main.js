@@ -10,13 +10,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   try {
     // Make a GET request to retrieve the customer's cart.
-    const getCartResponse = await fetch("/api/carts");
+    const getCartResponse = await fetch("/api/sessions/current");
 
     if (getCartResponse.ok) {
       // Extract the cart ID if it exists
       const cartData = await getCartResponse.json();
-      if (cartData?._id) {
-        cartId = cartData._id;
+
+      if (cartData?.cart) {
+        cartId = cartData.cart;
       }
     } else {
       console.error("Error retrieving the customer's cart.");
@@ -41,21 +42,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       try {
         if (!cartId) {
-          // If cart is not exist, create a new one
-          const createCartResponse = await fetch("/api/carts", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (createCartResponse.ok) {
-            const newCartData = await createCartResponse.json();
-            cartId = newCartData._id; // Update cartId
-          } else {
-            console.error("Error creating cart");
-            return;
-          }
+          console.log("User's cart not found");
+          return;
         }
 
         // Utilize the existing cart ID in the request to add the product
