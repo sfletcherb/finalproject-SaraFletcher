@@ -35,6 +35,7 @@ class ProductController {
 
   async addProduct(req, res) {
     let newProduct = req.body;
+
     try {
       await productRepositoryInstance.addProduct(newProduct);
       res
@@ -71,6 +72,7 @@ class ProductController {
 
   async deleteProduct(req, res) {
     const productId = req.params.pid;
+
     try {
       const productById = await productRepositoryInstance.getProductById(
         productId

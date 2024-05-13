@@ -1,7 +1,6 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
 const path = require("path");
-const socket = require("socket.io");
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
 const productsRouter = require("./routes/products.router.js");
@@ -11,13 +10,6 @@ const sessionsRouter = require("./routes/sessions.router.js");
 const passport = require("passport");
 const initializePassport = require("./config/passport.config.js");
 require("./database.js");
-const ProductModel = require("./models/products.model.js");
-const MessageModel = require("./models/message.model.js");
-const {
-  addProduct,
-  deleteProduct,
-  addProductInCart,
-} = require("./utils/get.products.js");
 
 const app = express();
 const PUERTO = 8080;
@@ -48,59 +40,6 @@ const httpServer = app.listen(PUERTO, () => {
   console.log(`listening on port ${PUERTO}`);
 });
 
-//Socket.io:
-const io = new socket.Server(httpServer);
-
-io.on("connection", async (socket) => {
-  console.log("A client has connected");
-
-  socket.on("greeting", (data) => {
-    console.log(data);
-  });
-
-  socket.on("message", async (data) => {
-    await MessageModel.create(data);
-    const messages = await MessageModel.find();
-    io.sockets.emit("message", messages);
-  });
-
-  try {
-    const data = await ProductModel.find();
-    io.sockets.emit("updateProductList", data);
-  } catch (error) {
-    console.log("could not read ", error);
-    throw error;
-  }
-
-  socket.on("addProduct", async (data) => {
-    const newData = data;
-    try {
-      await addProduct(newData);
-      const data = await ProductModel.find();
-      io.sockets.emit("updateProductList", data);
-    } catch (error) {
-      console.log("could not update ", error);
-      throw error;
-    }
-  });
-
-  socket.on("deleteProduct", async (productId) => {
-    try {
-      await deleteProduct(productId);
-      const data = await ProductModel.find();
-      io.sockets.emit("updateProductList", data);
-    } catch (error) {
-      console.log("could not delete ", error);
-      throw error;
-    }
-  });
-
-  socket.on("addProductInCart", async (productId) => {
-    try {
-      await addProductInCart(productId);
-    } catch (error) {
-      console.log("could not delete ", error);
-      throw error;
-    }
-  });
-});
+// WebSocket
+const SocketManager = require("./socket/socket.manager.js");
+new SocketManager(httpServer);

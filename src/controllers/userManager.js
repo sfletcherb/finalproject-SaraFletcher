@@ -1,4 +1,5 @@
 const userRepositoryInstance = require("../repositories/user.repository.js");
+const UserDTO = require("../dto/user.dto.js");
 const generateToken = require("../utils/jsonwebtoken.js");
 
 class UserController {
@@ -48,8 +49,14 @@ class UserController {
         .status(401)
         .json({ message: "There is not user authenticated" });
     }
-    const user = req.user;
-    res.status(200).json(user);
+
+    const userData = new UserDTO(
+      req.user.first_name,
+      req.user.last_name,
+      req.user.role
+    );
+
+    res.status(200).json(userData);
   }
 
   async logout(req, res) {
