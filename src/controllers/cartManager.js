@@ -45,11 +45,6 @@ class CartController {
     const quantity = req.body.quantity || 1;
 
     try {
-      if (req.user.role !== "user") {
-        return res
-          .status(403)
-          .send({ status: "error", message: "Access denied" });
-      }
       const upDateCart = await cartRepositoryInstance.addProductToCart(
         cartId,
         idProduct,

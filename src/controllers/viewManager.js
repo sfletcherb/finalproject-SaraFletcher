@@ -27,20 +27,10 @@ class ViewsController {
   }
 
   async realTimeProducts(req, res) {
-    if (req.user.role !== "admin") {
-      return res
-        .status(403)
-        .send({ status: "error", message: "Access denied" });
-    }
     res.render("realtimeproducts");
   }
 
   async chat(req, res) {
-    if (req.user.role !== "user") {
-      return res
-        .status(403)
-        .send({ status: "error", message: "Access denied" });
-    }
     res.render("chat");
   }
 
