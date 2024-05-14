@@ -6,6 +6,7 @@ const productsRouter = require("./routes/products.router.js");
 const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const sessionsRouter = require("./routes/sessions.router.js");
+const purchaseRouter = require("./routes/purchase.router.js");
 const passport = require("passport");
 const initializePassport = require("./config/passport.config.js");
 require("./database.js");
@@ -33,6 +34,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/purchase", purchaseRouter);
 
 //Listen:
 const httpServer = app.listen(PUERTO, () => {
