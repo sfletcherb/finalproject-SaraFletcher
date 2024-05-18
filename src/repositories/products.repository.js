@@ -57,11 +57,20 @@ class ProductRepository {
 
   async updateProduct(id, changes) {
     try {
-      const codeExist = await ProductModel.exists({ code: changes.code });
-
-      if (codeExist) {
-        throw new Error("Code already exists in another product");
+      /* if (!changes?.code) {
+        throw new Error("No se proporcionó un código de producto válido");
       }
+
+      const isStockChange =
+        Object.keys(changes).length === 1 && "stock" in changes;
+
+      if (!isStockChange) {
+        const codeExist = await ProductModel.exists({ code: changes.code });
+
+        if (codeExist) {
+          throw new Error("El código ya existe en otro producto");
+        }
+      } */
 
       await ProductModel.findByIdAndUpdate(id, changes);
     } catch (error) {
