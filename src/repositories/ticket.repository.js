@@ -13,6 +13,24 @@ class TicketRepository {
       throw new Error(error.message);
     }
   }
+
+  async getTicket(userEmail) {
+    try {
+      const dataTickets = await TicketModel.find({ purchaser: userEmail })
+        .sort({ purchase_datetime: -1 })
+        .exec();
+
+      if (dataTickets.length === 0) {
+        throw new Error("Ticket not found for the given email");
+      }
+
+      // Take the first ticket
+      const latestTicket = dataTickets[0];
+      return latestTicket;
+    } catch (error) {
+      throw new Error(`Error retrieving ticket: ${error.message}`);
+    }
+  }
 }
 
 const ticketRepositoryInstance = new TicketRepository();
