@@ -41,7 +41,13 @@ class EmailController {
         <div class="">
             <p>&copy; 2024 Ecommerce. Todos los derechos reservados.</p>
         </div>
-    </div>`,
+    </div>
+    /* <img src="cid:logo1"> */`,
+        /* attachments: [{
+          filename: "logo.jpg",
+          path: "./src/img/logo.jpg",
+          cid: "logo1"
+        }] */
       });
       res.send("email sent correctly");
     } catch (error) {
