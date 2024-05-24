@@ -7,6 +7,7 @@ const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const sessionsRouter = require("./routes/sessions.router.js");
 const emailRouter = require("./routes/email.router.js");
+const fakerRouter = require("./routes/faker.router.js");
 const passport = require("passport");
 const initializePassport = require("./config/passport.config.js");
 require("./database.js");
@@ -35,6 +36,7 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/", emailRouter);
+app.use("/", fakerRouter);
 
 //Listen:
 const httpServer = app.listen(PUERTO, () => {
