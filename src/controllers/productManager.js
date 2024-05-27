@@ -1,18 +1,31 @@
 const productRepositoryInstance = require("../repositories/products.repository.js");
+const CustomError = require("../helpers/errors/custom.error.js");
+const EErrors = require("../helpers/errors/error.dictionary.js");
+const { errorDB } = require("../helpers/errors/error.info.js");
 
 class ProductController {
-  async getAllProducts(req, res) {
+  async getAllProducts(req, res, next) {
     const limit = req.query.limit;
 
     try {
       const data = await productRepositoryInstance.getAllProducts();
+
+      if (!data) {
+        throw CustomError.createError({
+          name: "DatabaseConnectionError",
+          desc: errorDB(data),
+          message: "Failed to connect to the database",
+          code: EErrors.DB_ERROR,
+        });
+      }
+
       if (limit && !isNaN(parseInt(limit))) {
         res.json(data.slice(0, limit));
       } else {
         res.status(200).json(data);
       }
     } catch (error) {
-      res.status(500).send({ status: "error", message: error.message });
+      next(error);
     }
   }
 
