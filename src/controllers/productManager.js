@@ -1,7 +1,11 @@
 const productRepositoryInstance = require("../repositories/products.repository.js");
 const CustomError = require("../helpers/errors/custom.error.js");
 const EErrors = require("../helpers/errors/error.dictionary.js");
-const { errorDB } = require("../helpers/errors/error.info.js");
+const {
+  errorDB,
+  getErrorNotFound,
+  existsCode,
+} = require("../helpers/errors/error.info.js");
 
 class ProductController {
   async getAllProducts(req, res, next) {
@@ -29,7 +33,7 @@ class ProductController {
     }
   }
 
-  async getProductById(req, res) {
+  async getProductById(req, res, next) {
     const productId = req.params.pid;
 
     try {
@@ -38,15 +42,20 @@ class ProductController {
       );
 
       if (!productById) {
-        res.status(404).json({ error: "Product not found" });
+        throw CustomError.createError({
+          name: "ProductNotFoundError",
+          desc: getErrorNotFound(productById),
+          message: "The requested data could not be found in the database",
+          code: EErrors.NOT_FOUND,
+        });
       }
       res.status(200).json(productById);
     } catch (error) {
-      res.status(500).send({ status: "error", message: error.message });
+      next(error);
     }
   }
 
-  async addProduct(req, res) {
+  async addProduct(req, res, next) {
     let newProduct = req.body;
 
     try {
@@ -55,11 +64,11 @@ class ProductController {
         .status(200)
         .send({ status: "success", message: "Product added successfully" });
     } catch (error) {
-      res.status(500).send({ status: "error", message: error.message });
+      next(error);
     }
   }
 
-  async updateProduct(req, res) {
+  async updateProduct(req, res, next) {
     const productId = req.params.pid;
     const newChanges = req.body;
 
@@ -68,7 +77,14 @@ class ProductController {
         productId
       );
       if (!productById) {
-        return res.status(404).json({ error: "Product not found" });
+        if (!productById) {
+          throw CustomError.createError({
+            name: "ProductNotFoundError",
+            desc: getErrorNotFound(productById),
+            message: "The requested data could not be found in the database",
+            code: EErrors.NOT_FOUND,
+          });
+        }
       }
       if ("id" in newChanges) {
         return res.status(400).json({ error: "ID cannot be updated" });
@@ -79,11 +95,11 @@ class ProductController {
         .status(200)
         .send({ status: "success", message: "Product updated successfully" });
     } catch (error) {
-      res.status(500).send({ status: "error", message: error.message });
+      next(error);
     }
   }
 
-  async deleteProduct(req, res) {
+  async deleteProduct(req, res, next) {
     const productId = req.params.pid;
 
     try {
@@ -91,7 +107,12 @@ class ProductController {
         productId
       );
       if (!productById) {
-        return res.status(404).json({ error: "Product not found" });
+        throw CustomError.createError({
+          name: "ProductNotFoundError",
+          desc: getErrorNotFound(productById),
+          message: "The requested data could not be found in the database",
+          code: EErrors.NOT_FOUND,
+        });
       }
 
       await productRepositoryInstance.deleteProduct(productId);
@@ -99,7 +120,7 @@ class ProductController {
         .status(200)
         .send({ status: "success", message: "Product deleted successfully" });
     } catch (error) {
-      res.status(500).send({ status: "error", message: error.message });
+      next(error);
     }
   }
 }

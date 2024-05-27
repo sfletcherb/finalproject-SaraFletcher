@@ -6,4 +6,8 @@ const errorDB = (data) => {
   return `Error connecting to ${data}`;
 };
 
-module.exports = { getErrorNotFound, errorDB };
+const existsCode = (code) => {
+  return `Product with code ${code} already exists`;
+};
+
+module.exports = { getErrorNotFound, errorDB, existsCode };

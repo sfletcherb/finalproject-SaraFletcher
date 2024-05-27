@@ -13,6 +13,9 @@ const handleErrors = (err, req, res, next) => {
     case EErrors.DB_ERROR:
       res.status(500).send({ status: "error", err: err.name });
       break;
+    case EErrors.CODE_ALREADY_EXISTS:
+      res.status(409).send({ status: "error", err: err.name });
+      break;
     default:
       res.status(500).send({ status: "error", err: "Internal Server Error" });
   }

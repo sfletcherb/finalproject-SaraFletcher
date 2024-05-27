@@ -1,4 +1,8 @@
 const ProductModel = require("../models/products.model.js");
+const CustomError = require("../helpers/errors/custom.error.js");
+const EErrors = require("../helpers/errors/error.dictionary.js");
+const { existsCode } = require("../helpers/errors/error.info.js");
+const mongoose = require("mongoose");
 
 class ProductRepository {
   async getAllProducts() {
@@ -12,7 +16,9 @@ class ProductRepository {
 
   async getProductById(id) {
     try {
-      const findId = await ProductModel.findById(id);
+      const objectId = mongoose.Types.ObjectId.createFromHexString(id);
+
+      const findId = await ProductModel.findById(objectId);
       return findId;
     } catch (error) {
       throw new Error(error.message);
@@ -35,7 +41,12 @@ class ProductRepository {
     try {
       const codeExist = await ProductModel.findOne({ code: code });
       if (codeExist) {
-        throw new Error("The code already exists");
+        throw CustomError.createError({
+          name: "ExistsCodeError",
+          desc: existsCode(code),
+          message: "The code already exists in the database",
+          code: EErrors.CODE_ALREADY_EXISTS,
+        });
       }
       const newProduct = new ProductModel({
         title,
@@ -51,28 +62,15 @@ class ProductRepository {
 
       return await newProduct.save();
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   }
 
   async updateProduct(id, changes) {
     try {
-      /* if (!changes?.code) {
-        throw new Error("No se proporcionó un código de producto válido");
-      }
+      const objectId = mongoose.Types.ObjectId.createFromHexString(id);
 
-      const isStockChange =
-        Object.keys(changes).length === 1 && "stock" in changes;
-
-      if (!isStockChange) {
-        const codeExist = await ProductModel.exists({ code: changes.code });
-
-        if (codeExist) {
-          throw new Error("El código ya existe en otro producto");
-        }
-      } */
-
-      await ProductModel.findByIdAndUpdate(id, changes);
+      await ProductModel.findByIdAndUpdate(objectId, changes);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -80,7 +78,9 @@ class ProductRepository {
 
   async deleteProduct(id) {
     try {
-      await ProductModel.findByIdAndDelete(id);
+      const objectId = mongoose.Types.ObjectId.createFromHexString(id);
+
+      await ProductModel.findByIdAndDelete(objectId);
     } catch (error) {
       throw new Error(error.message);
     }
