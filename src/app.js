@@ -9,10 +9,12 @@ const viewsRouter = require("./routes/views.router.js");
 const sessionsRouter = require("./routes/sessions.router.js");
 const emailRouter = require("./routes/email.router.js");
 const fakerRouter = require("./routes/faker.router.js");
+const loggerRouter = require("./routes/logger.router.js");
 const handleErrors = require("./middleware/error.js");
 const passport = require("passport");
 const initializePassport = require("./config/passport.config.js");
 require("./database.js");
+const loggerMiddleware = require("./utils/logger.js");
 
 const app = express();
 const PUERTO = 8080;
@@ -28,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.use(compression());
+app.use(loggerMiddleware);
 
 // Using passport for authentication
 initializePassport();
@@ -40,6 +43,7 @@ app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/", emailRouter);
 app.use("/", fakerRouter);
+app.use("/", loggerRouter);
 app.use(handleErrors);
 
 //Listen:

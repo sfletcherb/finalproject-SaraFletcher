@@ -5,8 +5,16 @@ class CartController {
   async createCart(req, res) {
     try {
       const cart = await cartRepositoryInstance.createCart();
+      if (!cart) {
+        req.logger.error("Failed to create cart: cart is null or invalid");
+        return res
+          .status(500)
+          .send({ status: "error", message: "Failed to create cart" });
+      }
+      req.logger.info("Cart created");
       res.status(200).json(cart);
     } catch (error) {
+      req.logger.error(`Error creating cart: ${error.message}`);
       res.status(500).send({ status: "error", message: error.message });
     }
   }

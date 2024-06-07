@@ -77,14 +77,12 @@ class ProductController {
         productId
       );
       if (!productById) {
-        if (!productById) {
-          throw CustomError.createError({
-            name: "ProductNotFoundError",
-            desc: getErrorNotFound(productById),
-            message: "The requested data could not be found in the database",
-            code: EErrors.NOT_FOUND,
-          });
-        }
+        throw CustomError.createError({
+          name: "ProductNotFoundError",
+          desc: getErrorNotFound(productById),
+          message: "The requested data could not be found in the database",
+          code: EErrors.NOT_FOUND,
+        });
       }
       if ("id" in newChanges) {
         return res.status(400).json({ error: "ID cannot be updated" });

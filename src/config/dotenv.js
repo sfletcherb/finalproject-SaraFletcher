@@ -13,6 +13,7 @@ const configObject = {
   admin_password: process.env.ADMIN_PASSWORD,
   nodemailer_user: process.env.EMAIL_USER,
   nodemailer_password: process.env.EMAIL_PASS,
+  node_env: process.env.NODE_ENV,
 };
 
 module.exports = configObject;
