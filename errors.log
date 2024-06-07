@@ -1,0 +1,8 @@
+2024-06-07 11:53:42 [90m[90mhttp[90m[39m: POST en /api/carts
+2024-06-07 11:53:42 [31m[31merror[31m[39m: Failed to create cart: cart is null or invalid
+2024-06-07 11:54:11 [90m[90mhttp[90m[39m: GET en /loggerTest
+2024-06-07 11:54:11 [34m[34mdebug[34m[39m: This is a debug message
+2024-06-07 11:54:11 [90m[90mhttp[90m[39m: This is an HTTP log message
+2024-06-07 11:54:11 [36m[36minfo[36m[39m: This is an info message
+2024-06-07 11:54:11 [33m[33mwarning[33m[39m: This is a warning message
+2024-06-07 11:54:11 [31m[31merror[31m[39m: This is an error message
