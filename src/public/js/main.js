@@ -1,4 +1,5 @@
 const socket = io();
+
 console.log("Connected to socket");
 
 socket.emit("greeting", "Hello, connected from main.js");

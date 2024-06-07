@@ -1,4 +1,4 @@
-const { response } = require("express");
+const { response, request } = require("express");
 const cartRepositoryInstance = require("../repositories/carts.repository.js");
 
 class CartController {
@@ -24,9 +24,11 @@ class CartController {
 
     try {
       const data = await cartRepositoryInstance.getAllCarts();
+      req.logger.debug(`Received data: ${data}`);
       if (limit && !isNaN(parseInt(limit))) {
         res.json(data.slice(0, limit));
       } else {
+        req.logger.info("Received data successfully");
         res.status(200).json(data);
       }
     } catch (error) {
@@ -36,11 +38,14 @@ class CartController {
 
   async getCartById(req, res) {
     const cartId = req.params.cid;
+    req.logger.debug(`Current Cart ID: ${cartId}`);
     try {
       const cartById = await cartRepositoryInstance.getCartById(cartId);
       if (!cartById) {
+        req.logger.error(`Cart ${cartId} not found`);
         res.status(404).json({ error: "cart not found" });
       }
+      req.logger.info(`Cart Id is ${cartId}`);
       res.status(200).json(cartById);
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
@@ -58,6 +63,7 @@ class CartController {
         idProduct,
         quantity
       );
+      req.logger.info("Product added to cart");
       res.status(200).json(upDateCart);
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
@@ -74,6 +80,7 @@ class CartController {
         idProduct,
         newQuantity
       );
+      req.logger.debug("Elements updated in cart: " + updateCart);
       res.status(200).json(updateCart);
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
@@ -102,6 +109,7 @@ class CartController {
     try {
       const deleteProductInCart =
         await cartRepositoryInstance.deleteProductCart(cartId, idProduct);
+      req.logger.info("Product deleted");
       res.status(200).json({
         status: "success",
         message: "Product has been deleted",

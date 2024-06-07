@@ -40,7 +40,7 @@ class ProductController {
       const productById = await productRepositoryInstance.getProductById(
         productId
       );
-
+      req.logger.debug(`Current Product ID: ${productById}`);
       if (!productById) {
         throw CustomError.createError({
           name: "ProductNotFoundError",
@@ -76,6 +76,7 @@ class ProductController {
       const productById = await productRepositoryInstance.getProductById(
         productId
       );
+      req.logger.debug(`Current Product ID: ${productById}`);
       if (!productById) {
         throw CustomError.createError({
           name: "ProductNotFoundError",

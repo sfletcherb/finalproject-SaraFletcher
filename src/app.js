@@ -14,7 +14,7 @@ const handleErrors = require("./middleware/error.js");
 const passport = require("passport");
 const initializePassport = require("./config/passport.config.js");
 require("./database.js");
-const loggerMiddleware = require("./utils/logger.js");
+const loggerMiddleware = require("./utils/logger.js").loggerMiddleware;
 
 const app = express();
 const PUERTO = 8080;
