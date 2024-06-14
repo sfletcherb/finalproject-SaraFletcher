@@ -9,7 +9,7 @@ router.get("/", viewsControllerInstance.indexView);
 router.get(
   "/realtimeproducts",
   passport.authenticate("current", { session: false }),
-  verifyRole(["admin"]),
+  verifyRole(["admin", "premium"]),
   viewsControllerInstance.realTimeProducts
 );
 
