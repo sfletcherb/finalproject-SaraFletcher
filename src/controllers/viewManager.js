@@ -27,7 +27,8 @@ class ViewsController {
   }
 
   async realTimeProducts(req, res) {
-    res.render("realtimeproducts");
+    const user = { ...req.user };
+    res.render("realtimeproducts", { user });
   }
 
   async chat(req, res) {
@@ -72,7 +73,7 @@ class ViewsController {
         return { _id, ...rest };
       });
 
-      const user = Object.assign({}, req.user);
+      const user = { ...req.user };
 
       res.render("products", {
         status: finalResultProductList || productList ? "success" : "error",
@@ -110,6 +111,10 @@ class ViewsController {
 
   async login(req, res) {
     res.render("login");
+  }
+
+  async resetPassword(req, res) {
+    res.render("reset-password");
   }
 }
 

@@ -41,6 +41,11 @@ const productSchema = new mongoose.Schema({
   thumbnail: {
     type: [String],
   },
+  owner: {
+    type: String,
+    required: true,
+    default: "admin",
+  },
 });
 
 //Adding plugin for watching the results in pages

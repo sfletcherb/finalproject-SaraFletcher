@@ -1,6 +1,8 @@
 const userRepositoryInstance = require("../repositories/user.repository.js");
 const UserDTO = require("../dto/user.dto.js");
 const generateToken = require("../utils/jsonwebtoken.js");
+const UserModel = require("../models/user.model.js");
+const generateRandomToken = require("../utils/cryptotoken.js");
 
 class UserController {
   async userRegister(req, res) {
@@ -63,6 +65,33 @@ class UserController {
   async logout(req, res) {
     res.clearCookie("ecommerceCookie");
     res.redirect("/login");
+  }
+
+  async resetPasswordRequest(req, res) {
+    const { email } = req.body;
+
+    try {
+      const user = await UserModel.findOne({ email: email });
+
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      const token = generateRandomToken(6);
+
+      user.cryptoToken = {
+        token: token,
+        expiresAt: new Date(Date.now() + 3600000), // lasts 1 hour
+      };
+      await user.save();
+
+      await emailManager.sendResetEmail(email, user.first_name, token); //FALTA TERMINAR ESTA PARTE
+
+      res.redirect("/login");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Server internal error");
+    }
   }
 }
 

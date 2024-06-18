@@ -30,4 +30,6 @@ router.get("/register", viewsControllerInstance.register);
 
 router.get("/login", viewsControllerInstance.login);
 
+router.get("/reset-password", viewsControllerInstance.resetPassword);
+
 module.exports = router;

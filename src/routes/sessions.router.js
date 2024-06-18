@@ -16,6 +16,11 @@ router.get(
   userControllerInstance.current
 );
 
+router.post(
+  "/resetPasswordRequest",
+  userControllerInstance.resetPasswordRequest
+);
+
 router.all("/logout", userControllerInstance.logout);
 
 module.exports = router;
