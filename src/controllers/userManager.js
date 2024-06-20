@@ -94,7 +94,7 @@ class UserController {
         token
       );
 
-      res.redirect("/login");
+      res.send("The email has been sent successfully");
     } catch (error) {
       console.error(error);
       res.status(500).send("Server internal error");
@@ -102,7 +102,7 @@ class UserController {
   }
 
   async password(req, res) {
-    const token = req.params.token;
+    const token = req.body.token;
     const { email, password } = req.body;
 
     try {
@@ -123,12 +123,15 @@ class UserController {
       const now = new Date();
       if (now > cryptoToken.expiresAt) {
         return res.render("reset-password", {
-          error: "password reset token is invalid",
+          error: "password reset token expired",
         });
       }
 
       if (isValidPassword(password, user)) {
-        return res.render("reset-password", { error: "internal error server" });
+        return res.render("password", {
+          token,
+          error: "the password cannot be the same as the old",
+        });
       }
 
       user.password = createHash(password);
@@ -136,7 +139,7 @@ class UserController {
       user.cryptoToken = undefined;
       await user.save();
 
-      return res.redirect("login");
+      return res.redirect("/login");
     } catch (error) {
       return res
         .status(500)

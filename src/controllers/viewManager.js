@@ -118,7 +118,8 @@ class ViewsController {
   }
 
   async password(req, res) {
-    res.render("password");
+    const token = req.params.token;
+    res.render("password", { token });
   }
 }
 
