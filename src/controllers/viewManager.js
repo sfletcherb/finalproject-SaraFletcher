@@ -116,6 +116,10 @@ class ViewsController {
   async resetPassword(req, res) {
     res.render("reset-password");
   }
+
+  async password(req, res) {
+    res.render("password");
+  }
 }
 
 const viewsControllerInstance = new ViewsController();

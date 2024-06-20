@@ -3,6 +3,7 @@ const UserDTO = require("../dto/user.dto.js");
 const generateToken = require("../utils/jsonwebtoken.js");
 const UserModel = require("../models/user.model.js");
 const generateRandomToken = require("../utils/cryptotoken.js");
+const emailControllerInstance = require("../controllers/emailManager.js");
 
 class UserController {
   async userRegister(req, res) {
@@ -77,21 +78,30 @@ class UserController {
         return res.status(404).send("User not found");
       }
 
-      const token = generateRandomToken(6);
+      const token = await generateRandomToken(6);
 
       user.cryptoToken = {
         token: token,
         expiresAt: new Date(Date.now() + 3600000), // lasts 1 hour
       };
+
       await user.save();
 
-      await emailManager.sendResetEmail(email, user.first_name, token); //FALTA TERMINAR ESTA PARTE
+      await emailControllerInstance.sendResetEmail(
+        email,
+        user.first_name,
+        token
+      );
 
       res.redirect("/login");
     } catch (error) {
       console.error(error);
       res.status(500).send("Server internal error");
     }
+  }
+
+  async password(req, res) {
+    res.send("todo ok por acá");
   }
 }
 

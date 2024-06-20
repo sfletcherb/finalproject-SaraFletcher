@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "carts",
   },
+  cryptoToken: {
+    token: String,
+    expiresAt: Date,
+  },
 });
 
 userSchema.pre("save", async function (next) {

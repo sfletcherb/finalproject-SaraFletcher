@@ -51,7 +51,30 @@ class EmailController {
       });
       res.send("email sent correctly");
     } catch (error) {
-      res.status(500).send("error sending email");
+      res.status(500).send("error sending email purchase");
+    }
+  }
+
+  async sendResetEmail(email, first_name, token) {
+    try {
+      const mailOptions = {
+        from: "ecommerce Test <saflebri@gmail.com>",
+        to: email,
+        subject: `Reset email`,
+        html: `
+        <p>Hola ${first_name},</p>
+        <p>Recibiste este correo porque solicitaste restablecer tu contraseña.</p>
+        <p>Para continuar con el proceso, haz clic en el siguiente enlace:</p>
+        <a href="http://localhost:8080/password/${token}">Restablecer contraseña</a>
+        <p>Si no solicitaste restablecer tu contraseña, puedes ignorar este correo de forma segura.</p>
+        <p>Gracias,</p>
+        <p>Tu equipo de soporte</p>
+    `,
+      };
+
+      await transport.sendMail(mailOptions);
+    } catch (error) {
+      console.error("Error sending email: ", error);
     }
   }
 }
