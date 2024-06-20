@@ -4,6 +4,7 @@ const generateToken = require("../utils/jsonwebtoken.js");
 const UserModel = require("../models/user.model.js");
 const generateRandomToken = require("../utils/cryptotoken.js");
 const emailControllerInstance = require("../controllers/emailManager.js");
+const { isValidPassword, createHash } = require("../utils/hashbcrypt.js");
 
 class UserController {
   async userRegister(req, res) {
@@ -101,7 +102,46 @@ class UserController {
   }
 
   async password(req, res) {
-    res.send("todo ok por acá");
+    const token = req.params.token;
+    const { email, password } = req.body;
+
+    try {
+      const user = await UserModel.findOne({ email: email });
+
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      const cryptoToken = user.cryptoToken;
+
+      if (!cryptoToken || cryptoToken.token !== token) {
+        return res.render("reset-password", {
+          error: "password reset token is invalid",
+        });
+      }
+
+      const now = new Date();
+      if (now > cryptoToken.expiresAt) {
+        return res.render("reset-password", {
+          error: "password reset token is invalid",
+        });
+      }
+
+      if (isValidPassword(password, user)) {
+        return res.render("reset-password", { error: "internal error server" });
+      }
+
+      user.password = createHash(password);
+
+      user.cryptoToken = undefined;
+      await user.save();
+
+      return res.redirect("login");
+    } catch (error) {
+      return res
+        .status(500)
+        .render("passwordreset", { error: "Internal error server" });
+    }
   }
 }
 

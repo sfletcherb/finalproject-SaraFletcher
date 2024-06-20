@@ -21,6 +21,8 @@ router.post(
   userControllerInstance.resetPasswordRequest
 );
 
+router.post("/password", userControllerInstance.password);
+
 router.all("/logout", userControllerInstance.logout);
 
 module.exports = router;
