@@ -1,0 +1,426 @@
+openapi: 3.0.1
+info:
+  title: Carts API
+  description: E-commerce API for managing carts and purchases
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+paths:
+  /api/carts:
+    post:
+      summary: Create a new cart
+      tags:
+        - Carts API
+      description: Creates a new cart
+      responses:
+        "200":
+          description: Cart created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Failed to create cart
+
+    get:
+      summary: Get all carts
+      tags:
+        - Carts API
+      description: Returns a list of all carts with an option to limit the number of results
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+          description: Limit the number of carts returned
+      responses:
+        "200":
+          description: List of carts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /api/carts/{cid}:
+    get:
+      summary: Get a cart by ID
+      tags:
+        - Carts API
+      description: Returns a single cart by its ID
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: The ID of the cart to retrieve
+      responses:
+        "200":
+          description: A single cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: cart not found
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+
+    put:
+      summary: Update cart with array of products
+      tags:
+        - Carts API
+      description: Updates a cart with an array of products
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: The ID of the cart to update
+      requestBody:
+        description: Array of products to update in the cart
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/CartInput"
+      responses:
+        "200":
+          description: Cart updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+
+    delete:
+      summary: Delete all products from cart
+      tags:
+        - Carts API
+      description: Deletes all products from the cart by its ID
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: The ID of the cart from which all products will be deleted
+      responses:
+        "200":
+          description: All products deleted from cart successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: All products deleted successfully
+                  deleteAllProductsInCart:
+                    $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Add a product to cart
+      tags:
+        - Carts API
+      description: Adds a product to the cart by its ID
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: The ID of the cart to which the product will be added
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to add to the cart
+      requestBody:
+        description: Product details to add to cart
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 1
+                  description: The quantity of the product to add (default is 1)
+                  example: 2
+      responses:
+        "200":
+          description: Product added to cart successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+
+    put:
+      summary: Update product quantity in cart
+      tags:
+        - Carts API
+      description: Updates the quantity of a product in the cart by its IDs
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: The ID of the cart containing the product
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to update in the cart
+      requestBody:
+        description: New quantity to update for the product in the cart
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 1
+                  description: The new quantity of the product in the cart (default is 1)
+                  example: 3
+      responses:
+        "200":
+          description: Product quantity updated in cart successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+
+    delete:
+      summary: Delete a product from cart
+      tags:
+        - Carts API
+      description: Deletes a product from the cart by its ID
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: The ID of the cart containing the product
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to delete from the cart
+      responses:
+        "200":
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Product has been deleted
+                  deleteProductInCart:
+                    $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Create a ticket for cart purchase
+      tags:
+        - Carts API
+      description: Creates a ticket for the products in the cart identified by its ID
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: The ID of the cart to create a ticket for
+      responses:
+        "200":
+          description: Ticket created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the cart
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: The unique identifier for the product
+              quantity:
+                type: number
+                description: The quantity of the product in the cart
+    CartInput:
+      type: object
+      properties:
+        product:
+          type: string
+          description: The unique identifier for the product
+          example: 60b8d295f1b2c70015d1a720
+        quantity:
+          type: integer
+          description: The quantity of the product in the cart
+          example: 2
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the ticket
+        total:
+          type: number
+          description: The total amount for the ticket

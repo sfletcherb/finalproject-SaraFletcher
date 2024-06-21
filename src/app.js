@@ -15,6 +15,8 @@ const passport = require("passport");
 const initializePassport = require("./config/passport.config.js");
 require("./database.js");
 const loggerMiddleware = require("./utils/logger.js").loggerMiddleware;
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger.js");
 
 const app = express();
 const PUERTO = 8080;
@@ -31,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.use(compression());
 app.use(loggerMiddleware);
+app.use("/apidocs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Using passport for authentication
 initializePassport();
