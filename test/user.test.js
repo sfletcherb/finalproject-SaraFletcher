@@ -46,7 +46,7 @@ describe("Testing repository of user", function () {
     assert.deepStrictEqual(result.email, email);
   });
 
-  it("should return the _id exist", async function () {
+  it("should return the _id if the user is create in DB", async function () {
     const email = this.uniqueEmail;
     const password = "password123";
 
