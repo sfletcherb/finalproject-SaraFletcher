@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/cartsChai.test.js",
+    "test": "mocha test/user.test.js",
     "start": "node src/app.js --mode production",
     "dev": "nodemon src/app.js --mode development"
   },

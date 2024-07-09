@@ -46,6 +46,15 @@ describe("Testing repository of user", function () {
     assert.deepStrictEqual(result.email, email);
   });
 
+  it("should return the _id exist", async function () {
+    const email = this.uniqueEmail;
+    const password = "password123";
+
+    const result = await this.productsInstance.userLogin(email, password);
+
+    assert.ok(result._id);
+  });
+
   it("should throw an error if the email does not exist", async function () {
     const email = "nonexistent@example.com";
     const password = "password123";
@@ -58,3 +67,4 @@ describe("Testing repository of user", function () {
     }
   });
 });
+0;
