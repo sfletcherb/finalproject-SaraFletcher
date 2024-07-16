@@ -115,6 +115,8 @@ const initChat = () => {
 const updateProductList = (data) => {
   const listProducts = document.getElementById("list-products");
   listProducts.innerHTML = "";
+  const roleType = listProducts.getAttribute("data-product-role");
+  console.log("roletypemain", roleType);
 
   data.forEach((product) => {
     listProducts.innerHTML += `<div class="card">
@@ -125,7 +127,7 @@ const updateProductList = (data) => {
       <p><strong>Precio: </strong>${product.price} </p>
       <p><strong>Código: </strong>${product.code} </p>
       <p><strong>Stock: </strong>${product.stock} </p>
-      <a href="#" class="btn btn-card">Eliminar</a>
+      <a href="#" class="btn btn-card" data-product-owner="${product.owner}">Eliminar</a>
     </div>
   </div>`;
   });
@@ -133,6 +135,14 @@ const updateProductList = (data) => {
   document.querySelectorAll(".btn-card").forEach((btn) => {
     btn.addEventListener("click", (event) => {
       const card = event.target.closest(".card");
+      const productOwner =
+        event.currentTarget.getAttribute("data-product-owner");
+
+      if (roleType === "premium" && productOwner !== "premium") {
+        alert("You are not allowed to delete products owned by admin");
+        return;
+      }
+
       const productId = card
         .querySelector("p")
         .textContent.split(":")[1]
@@ -157,6 +167,5 @@ const updateProductList = (data) => {
 
 // Get data by socket
 socket.on("updateProductList", updateProductList);
-
 // init Chat
 initChat();

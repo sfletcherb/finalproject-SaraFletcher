@@ -1,7 +1,7 @@
 <h1 class="main-title">Lista de productos</h1>
 
 <div class="container">
-  <div class="card-container" id="list-products">
+  <div class="card-container" id="list-products" data-product-role="{{user}}">
   </div>
 </div>
 
@@ -72,6 +72,12 @@
         name="category"
         required
       />
+    </div>
+    <div class="col">
+      <select class="form-control" id="owner" name="owner">
+        <option value="">Select option</option>
+        <option value="premium">premium</option>
+      </select>
     </div>
   </div>
   <button type="submit" class="btn btn-style">Enviar</button>

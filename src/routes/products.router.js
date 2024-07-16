@@ -8,11 +8,16 @@ router.get("/", productControllerInstance.getAllProducts);
 router.get("/:pid", productControllerInstance.getProductById);
 router.post(
   "/",
-  /* passport.authenticate("current", { session: false }),
-  verifyRole(["admin", "premium"]), */
+  passport.authenticate("current", { session: false }),
+  verifyRole(["admin", "premium"]),
   productControllerInstance.addProduct
 );
 router.put("/:pid", productControllerInstance.updateProduct);
-router.delete("/:pid", productControllerInstance.deleteProduct);
+router.delete(
+  "/:pid",
+  passport.authenticate("current", { session: false }),
+  verifyRole(["admin", "premium"]),
+  productControllerInstance.deleteProduct
+);
 
 module.exports = router;

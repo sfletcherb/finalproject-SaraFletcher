@@ -6,6 +6,7 @@ const {
   getErrorNotFound,
   existsCode,
 } = require("../helpers/errors/error.info.js");
+const { request } = require("express");
 
 class ProductController {
   async getAllProducts(req, res, next) {
@@ -100,17 +101,30 @@ class ProductController {
 
   async deleteProduct(req, res, next) {
     const productId = req.params.pid;
+    const userRole = req.user.role;
+    console.log("userRole", userRole);
 
     try {
       const productById = await productRepositoryInstance.getProductById(
         productId
       );
+
       if (!productById) {
         throw CustomError.createError({
           name: "ProductNotFoundError",
           desc: getErrorNotFound(productById),
           message: "The requested data could not be found in the database",
           code: EErrors.NOT_FOUND,
+        });
+      }
+
+      if (userRole === "premium" && productById.owner !== "premium") {
+        req.logger.error(
+          "You are not allowed to delete this product created by admin user"
+        );
+        return res.status(403).send({
+          status: "error",
+          message: "You are not allowed to delete this product",
         });
       }
 

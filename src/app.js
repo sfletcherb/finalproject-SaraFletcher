@@ -17,6 +17,7 @@ require("./database.js");
 const loggerMiddleware = require("./utils/logger.js").loggerMiddleware;
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger.js");
+const cors = require("cors");
 
 const app = express();
 const PUERTO = 8080;
@@ -36,8 +37,8 @@ app.use(loggerMiddleware);
 app.use("/apidocs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Using passport for authentication
-initializePassport();
 app.use(passport.initialize());
+initializePassport();
 
 //Routes:
 app.use("/api/products", productsRouter);

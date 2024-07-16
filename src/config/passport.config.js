@@ -5,6 +5,15 @@ const UserModel = require("../models/user.model.js");
 const JWTStrategy = jwt.Strategy;
 const ExtractJwt = jwt.ExtractJwt;
 
+// Create cookie extractor
+const cookieExtractor = (req) => {
+  let token = null;
+  if (req?.cookies) {
+    token = req.cookies["ecommerceCookie"];
+  }
+  return token;
+};
+
 const initializePassport = () => {
   passport.use(
     "current",
@@ -26,15 +35,6 @@ const initializePassport = () => {
       }
     )
   );
-};
-
-// Create cookie extractor
-const cookieExtractor = (req) => {
-  let token = null;
-  if (req && req.cookies) {
-    token = req.cookies["ecommerceCookie"];
-  }
-  return token;
 };
 
 module.exports = initializePassport;

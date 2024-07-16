@@ -27,7 +27,8 @@ class ViewsController {
   }
 
   async realTimeProducts(req, res) {
-    const user = { ...req.user };
+    const user = req.user.role;
+    console.log("viewcontroller", user);
     res.render("realtimeproducts", { user });
   }
 

@@ -36,6 +36,7 @@ class ProductRepository {
       category,
       status,
       thumbnail,
+      owner,
     } = dataProducts;
 
     try {
@@ -58,11 +59,17 @@ class ProductRepository {
         category,
         status,
         thumbnail: thumbnail || [],
+        owner: owner || "admin",
       });
 
       return await newProduct.save();
     } catch (error) {
-      throw error;
+      if (error.code === 11000) {
+        // Error de clave duplicada
+        throw new Error(`Duplicate key error: ${error.message}`);
+      }
+      // Otros errores
+      throw new Error(error.message);
     }
   }
 
