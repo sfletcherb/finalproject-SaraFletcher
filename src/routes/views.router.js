@@ -34,4 +34,6 @@ router.get("/reset-password", viewsControllerInstance.resetPassword);
 
 router.get("/password/:token", viewsControllerInstance.password);
 
+router.get("/changeRole/:uid", viewsControllerInstance.changeRole);
+
 module.exports = router;

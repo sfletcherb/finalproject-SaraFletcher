@@ -23,6 +23,8 @@ router.post(
 
 router.post("/password", userControllerInstance.password);
 
+router.post("/premium/:uid", userControllerInstance.changeRole);
+
 router.all("/logout", userControllerInstance.logout);
 
 module.exports = router;

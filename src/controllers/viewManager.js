@@ -122,6 +122,11 @@ class ViewsController {
     const token = req.params.token;
     res.render("password", { token });
   }
+
+  async changeRole(req, res) {
+    const uid = req.params.uid;
+    res.render("changeRole", { uid });
+  }
 }
 
 const viewsControllerInstance = new ViewsController();

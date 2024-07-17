@@ -41,7 +41,7 @@ class UserController {
 
       res.cookie("ecommerceCookie", token, { maxAge: 3600000, httpOnly: true });
 
-      res.redirect("/api/sessions/current");
+      res.redirect("/api/users/current");
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
     }
@@ -144,6 +144,19 @@ class UserController {
       return res
         .status(500)
         .render("passwordreset", { error: "Internal error server" });
+    }
+  }
+
+  async changeRole(req, res) {
+    const { newRole } = req.body;
+    const uid = req.params.uid;
+
+    try {
+      await userRepositoryInstance.changeRole(uid, newRole);
+      res.render("changeRole", { uid });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Server internal error");
     }
   }
 }

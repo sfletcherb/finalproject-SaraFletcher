@@ -1,0 +1,14 @@
+<h1>Cambio de roles</h1>
+<form action="/api/users/premium/{{uid}}" method="POST">
+  <select id="role" name="newRole" required>
+    <option value="">Select option</option>
+    <option value="premium">Premium</option>
+    <option value="user">User</option>
+  </select>
+
+  <button type="submit">Cambiar role</button>
+</form>
+
+{{!-- {{#if error}}
+  <p class="error-message">{{error}}</p>
+{{/if}} --}}

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   try {
     // Make a GET request to retrieve the customer's cart.
-    const getCartResponse = await fetch("/api/sessions/current");
+    const getCartResponse = await fetch("/api/users/current");
 
     if (getCartResponse.ok) {
       // Extract the cart ID if it exists

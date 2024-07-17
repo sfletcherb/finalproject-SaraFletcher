@@ -43,6 +43,28 @@ class UserRepository {
       throw new Error(error.message);
     }
   }
+
+  async changeRole(uid, role) {
+    try {
+      const user = await UserModel.findById(uid);
+      if (!user) {
+        throw new Error("The user does not exist");
+      }
+
+      if (
+        (user.role === "user" && role === "premium") ||
+        (user.role === "premium" && role === "user")
+      ) {
+        user.role = role;
+        await user.save();
+      } else {
+        throw new Error("Invalid role specified");
+      }
+    } catch (error) {
+      console.error("Error changing role:", error.message);
+      throw error;
+    }
+  }
 }
 
 const userRepositoryInstance = new UserRepository();
