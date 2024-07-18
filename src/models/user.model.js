@@ -37,6 +37,8 @@ const userSchema = new mongoose.Schema({
     token: String,
     expiresAt: Date,
   },
+  /* documents: [{ name: { type: String }, reference: { type: String } }], */
+  last_connection: { type: Date, default: Date.now },
 });
 
 userSchema.pre("save", async function (next) {

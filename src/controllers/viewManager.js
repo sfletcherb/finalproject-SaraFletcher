@@ -127,6 +127,10 @@ class ViewsController {
     const uid = req.params.uid;
     res.render("changeRole", { uid });
   }
+
+  async success(req, res) {
+    res.render("success");
+  }
 }
 
 const viewsControllerInstance = new ViewsController();

@@ -25,6 +25,10 @@ router.post("/password", userControllerInstance.password);
 
 router.post("/premium/:uid", userControllerInstance.changeRole);
 
-router.all("/logout", userControllerInstance.logout);
+router.all(
+  "/logout",
+  passport.authenticate("current", { session: false }),
+  userControllerInstance.logout
+);
 
 module.exports = router;

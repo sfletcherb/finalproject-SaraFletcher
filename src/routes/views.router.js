@@ -36,4 +36,6 @@ router.get("/password/:token", viewsControllerInstance.password);
 
 router.get("/changeRole/:uid", viewsControllerInstance.changeRole);
 
+router.get("/success", viewsControllerInstance.success);
+
 module.exports = router;

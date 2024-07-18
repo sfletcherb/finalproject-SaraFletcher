@@ -31,6 +31,12 @@ class UserController {
 
     try {
       const user = await userRepositoryInstance.userLogin(email, password);
+
+      await UserModel.updateOne(
+        { _id: user._id },
+        { $set: { last_connection: Date.now() } }
+      );
+
       const token = generateToken({
         first_name: user.first_name,
         last_name: user.last_name,
@@ -65,6 +71,12 @@ class UserController {
   }
 
   async logout(req, res) {
+    const user = req.user;
+
+    await UserModel.updateOne(
+      { _id: user._id },
+      { $set: { last_connection: Date.now() } }
+    );
     res.clearCookie("ecommerceCookie");
     res.redirect("/login");
   }
@@ -139,7 +151,12 @@ class UserController {
       user.cryptoToken = undefined;
       await user.save();
 
-      return res.redirect("/login");
+      res.render("success", {
+        layout: "main",
+        title: "Password Reset Success",
+        message: "The password has been updated successfully.",
+        redirectUrl: "/login",
+      });
     } catch (error) {
       return res
         .status(500)
@@ -153,7 +170,12 @@ class UserController {
 
     try {
       await userRepositoryInstance.changeRole(uid, newRole);
-      res.render("changeRole", { uid });
+      res.render("success", {
+        layout: "main",
+        title: "Role Change Success",
+        message: "The role has been changed successfully.",
+        redirectUrl: "/login",
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send("Server internal error");
