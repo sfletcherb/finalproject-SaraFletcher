@@ -1,3 +1,44 @@
+/* Estilos generales */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
+}
+
+/* Estilos del header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #333;
+  color: #fff;
+}
+
+header .logo {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+header nav {
+  display: flex;
+  gap: 20px;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1em;
+  transition: color 0.3s ease;
+}
+
+header nav a:hover {
+  color: #1e90ff;
+}
+
+/* Estilos de la tarjeta */
 .main-title {
   color: #4C58A0;
   text-align: center;
@@ -14,7 +55,6 @@
   width: 300px;
   height: auto;
   border-color: #EEEEEE;
-
 }
 
 .card-body p {
@@ -41,13 +81,13 @@
   font-weight: bold;
 }
 
+/* Estilos del formulario de productos */
 .productForm {
   display: flex;
   padding: 20px;
   margin-top: 10px;
   gap: 5px;
 }
-
 
 .btn-style {
   background-color: #4C58A0;
@@ -61,6 +101,47 @@
   font-weight: bold;
 }
 
-h1 {
-  color: green;
+/* Estilos del contenedor de carga */
+.upload-container {
+  margin-top: 10px;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 300px;
+  text-align: center;
+  margin: 20px auto;
+  /* Centra el contenedor */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-container h2 {
+  margin-top: 0;
+}
+
+.upload-container input[type="file"],
+.upload-container input[type="text"] {
+  margin: 10px 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.upload-container button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.upload-container button:hover {
+  background-color: #45a049;
 }

@@ -131,6 +131,11 @@ class ViewsController {
   async success(req, res) {
     res.render("success");
   }
+
+  async upload(req, res) {
+    const uid = req.params.uid;
+    res.render("upload", { uid });
+  }
 }
 
 const viewsControllerInstance = new ViewsController();

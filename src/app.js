@@ -41,10 +41,10 @@ app.use(passport.initialize());
 initializePassport();
 
 //Routes:
+app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
-app.use("/api/users", usersRouter);
 app.use("/", emailRouter);
 app.use("/", fakerRouter);
 app.use("/", loggerRouter);

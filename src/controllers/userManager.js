@@ -181,6 +181,43 @@ class UserController {
       res.status(500).send("Server internal error");
     }
   }
+
+  async upload(req, res) {
+    const fileType = req.body.fileType;
+    const files = req.files;
+    const uid = req.params.uid;
+    console.log("userId", uid);
+    console.log("Tipo de archivo seleccionado:", fileType);
+
+    try {
+      if (!files || Object.keys(files).length === 0) {
+        return res.status(400).send("No file uploaded");
+      }
+
+      const user = await UserModel.findById(uid);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      const documentsToAdd = [];
+      if (files[fileType]) {
+        files[fileType].forEach((file) => {
+          documentsToAdd.push({
+            name: file.originalname,
+            reference: file.path,
+          });
+        });
+      }
+
+      user.documents.push(...documentsToAdd);
+      await user.save();
+
+      res.send({ status: "success", message: "file uploaded successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Server internal error");
+    }
+  }
 }
 
 const userControllerInstance = new UserController();

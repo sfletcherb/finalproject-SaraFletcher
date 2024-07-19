@@ -38,4 +38,6 @@ router.get("/changeRole/:uid", viewsControllerInstance.changeRole);
 
 router.get("/success", viewsControllerInstance.success);
 
+router.get("/upload/:uid", viewsControllerInstance.upload);
+
 module.exports = router;
