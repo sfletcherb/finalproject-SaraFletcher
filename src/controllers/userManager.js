@@ -186,7 +186,6 @@ class UserController {
     const fileType = req.body.fileType;
     const files = req.files;
     const uid = req.params.uid;
-    console.log("userId", uid);
     console.log("Tipo de archivo seleccionado:", fileType);
 
     try {
@@ -200,14 +199,12 @@ class UserController {
       }
 
       const documentsToAdd = [];
-      if (files[fileType]) {
-        files[fileType].forEach((file) => {
-          documentsToAdd.push({
-            name: file.originalname,
-            reference: file.path,
-          });
+      files.forEach((file) => {
+        documentsToAdd.push({
+          name: file.originalname,
+          reference: file.path,
         });
-      }
+      });
 
       user.documents.push(...documentsToAdd);
       await user.save();

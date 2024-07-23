@@ -5,13 +5,14 @@
     method="POST"
     enctype="multipart/form-data"
   >
-    <input type="file" name="files" required />
+
     <select name="fileType" required>
       <option value="" disabled selected>Selecciona el tipo de archivo</option>
       <option value="profiles">Profiles</option>
       <option value="documents">Documents</option>
       <option value="products">Products</option>
     </select>
+    <input type="file" name="files" required />
     <button type="submit">Subir</button>
   </form>
 </div>

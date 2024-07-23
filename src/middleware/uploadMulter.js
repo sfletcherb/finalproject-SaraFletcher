@@ -3,18 +3,20 @@ const path = require("path");
 const fs = require("fs");
 
 const folderMap = {
-  profiles: "public/profiles",
-  products: "public/products",
-  documents: "public/documents",
-  misc: "public/misc",
+  profiles: "src/upload/profiles",
+  products: "src/upload/products",
+  documents: "src/upload/documents",
+  misc: "src/upload/misc",
 };
 
 // where to store the files
 const storage = multer.diskStorage({
   // reference to directory where to store the files
   destination: function (req, file, cb) {
-    const folder = folderMap[req.body.fileType] || folderMap["misc"];
-    const fullPath = path.join(__dirname, folder);
+    const fileType = req.body.fileType;
+
+    const folder = folderMap[fileType] || folderMap["misc"];
+    const fullPath = path.join(process.cwd(), folder);
 
     if (!fs.existsSync(fullPath)) {
       fs.mkdirSync(fullPath, { recursive: true });
