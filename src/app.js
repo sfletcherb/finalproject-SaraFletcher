@@ -18,6 +18,7 @@ const loggerMiddleware = require("./utils/logger.js").loggerMiddleware;
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger.js");
 const cors = require("cors");
+const { setBodyClass, showHeader } = require("./middleware/pageMiddleware.js");
 
 const app = express();
 const PUERTO = 8080;
@@ -35,6 +36,8 @@ app.use(cookieParser());
 app.use(compression());
 app.use(loggerMiddleware);
 app.use("/apidocs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(setBodyClass);
+app.use(showHeader);
 
 // Using passport for authentication
 app.use(passport.initialize());

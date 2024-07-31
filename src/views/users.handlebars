@@ -1,0 +1,23 @@
+<div class="user-table-container">
+  <h2>Usuarios</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre Completo</th>
+        <th>Role</th>
+        <th>Correo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each usersData}}
+        <tr>
+          <td>{{this.first_name}} {{this.last_name}}</td>
+          <td>{{this.role}}</td>
+          <td>{{this.email}}</td>
+          <td><button class="delete-btn">Eliminar</button></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

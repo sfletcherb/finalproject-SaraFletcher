@@ -1,147 +1,257 @@
-/* Estilos generales */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  background-color: #f4f4f4;
 }
 
-/* Estilos del header */
+body.main-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('/images/image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.main-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin-left: 10%;
+  max-width: 80%;
+}
+
+.auth-container {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 500px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  background-color: #ffa500;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 45%;
+}
+
+.tab-button:hover {
+  background-color: #ff7f00;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form.hidden {
+  display: none;
+}
+
+.auth-form label {
+  margin: 10px 0 5px;
+}
+
+.auth-form input,
+.auth-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.auth-form button {
+  background-color: #ffa500;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.auth-form button:hover {
+  background-color: #ff7f00;
+}
+
+.auth-form p {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Estilos para el formulario de registro en dos columnas */
+.form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-group {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.form-group:last-child {
+  margin-right: 0;
+}
+
+
+/* Estilos para el header */
+body.other-pages {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  background-color: #333;
-  color: #fff;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-header .logo {
-  font-size: 1.5em;
-  font-weight: bold;
+.logo img {
+  height: 60px;
 }
 
-header nav {
+.search-bar {
   display: flex;
-  gap: 20px;
-}
-
-header nav a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 1em;
-  transition: color 0.3s ease;
-}
-
-header nav a:hover {
-  color: #1e90ff;
-}
-
-/* Estilos de la tarjeta */
-.main-title {
-  color: #4C58A0;
-  text-align: center;
-  padding: 30px;
-}
-
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-}
-
-.card {
-  width: 300px;
-  height: auto;
-  border-color: #EEEEEE;
-}
-
-.card-body p {
-  color: #5B5B5F;
-}
-
-.card-img-top {
-  width: 59%;
-  align-self: center;
-}
-
-.btn-card {
-  background-color: #4C58A0;
-  color: #ffffff;
-  display: flex;
-  width: 50%;
-  justify-content: center;
-  margin: auto;
-}
-
-.btn-card:hover {
-  background-color: #03BECA;
-  color: #ffffff;
-  font-weight: bold;
-}
-
-/* Estilos del formulario de productos */
-.productForm {
-  display: flex;
-  padding: 20px;
-  margin-top: 10px;
-  gap: 5px;
-}
-
-.btn-style {
-  background-color: #4C58A0;
-  color: #ffffff;
-  margin: auto;
-  width: 25%;
-}
-
-.btn-style:hover {
-  background-color: #03BECA;
-  font-weight: bold;
-}
-
-/* Estilos del contenedor de carga */
-.upload-container {
-  margin-top: 10px;
-  background: #fff;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  width: 300px;
-  text-align: center;
-  margin: 20px auto;
-  /* Centra el contenedor */
-  display: flex;
-  flex-direction: column;
   align-items: center;
-}
-
-.upload-container h2 {
-  margin-top: 0;
-}
-
-.upload-container input[type="file"],
-.upload-container input[type="text"] {
-  margin: 10px 0;
+  background-color: #f5f5f5;
+  padding: 5px 10px;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
 }
 
-.upload-container button {
-  background-color: #4CAF50;
+.search-bar input {
+  border: none;
+  background: none;
+  outline: none;
+  padding: 10px;
+  flex: 1;
+  font-size: 16px;
+}
+
+.search-bar button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.search-bar button img {
+  height: 20px;
+  width: 20px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-left: 25px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #ff6347;
+}
+
+nav ul li a img {
+  height: 24px;
+  width: 24px;
+  vertical-align: middle;
+}
+
+/* Estilos para tabla usuarios */
+.user-table-container {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+  width: 80%;
+  /* Ajusta el tamaño de la tabla */
+  max-width: 800px;
+  /* Ancho máximo */
+  margin: 10px auto;
+  /* Centra el contenedor */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Añade sombra para darle un toque moderno */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  background-color: #ffffff;
+  /* Fondo blanco para el contenedor */
+}
+
+.user-table-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  /* Añade un margen inferior al encabezado */
+}
+
+.user-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.user-table-container th, .user-table-container td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.user-table-container th {
+  background-color: #f8f8f8;
+}
+
+.user-table-container tr:hover {
+  background-color: #f1f1f1;
+}
+
+.user-table-container button {
+  background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 12px;
   cursor: pointer;
   border-radius: 5px;
-  margin-top: 10px;
-  width: 100%;
 }
 
-.upload-container button:hover {
-  background-color: #45a049;
+.user-table-container button:hover {
+  background-color: #c0392b;
 }

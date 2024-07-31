@@ -4,8 +4,6 @@ const passport = require("passport");
 const verifyRole = require("../middleware/authMiddleware.js");
 const viewsControllerInstance = require("../controllers/viewManager.js");
 
-router.get("/", viewsControllerInstance.indexView);
-
 router.get(
   "/realtimeproducts",
   passport.authenticate("current", { session: false }),
@@ -26,9 +24,16 @@ router.get(
   viewsControllerInstance.products
 );
 
-router.get("/register", viewsControllerInstance.register);
+router.get(
+  "/users",
+  passport.authenticate("current", { session: false }),
+  verifyRole(["admin"]),
+  viewsControllerInstance.getUsers
+);
 
-router.get("/login", viewsControllerInstance.login);
+router.get("/", viewsControllerInstance.login);
+
+router.get("/login-register", viewsControllerInstance.login);
 
 router.get("/reset-password", viewsControllerInstance.resetPassword);
 

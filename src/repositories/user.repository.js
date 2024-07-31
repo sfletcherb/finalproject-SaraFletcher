@@ -65,6 +65,15 @@ class UserRepository {
       throw error;
     }
   }
+
+  async getUsers() {
+    try {
+      const users = await UserModel.find();
+      return users;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 const userRepositoryInstance = new UserRepository();

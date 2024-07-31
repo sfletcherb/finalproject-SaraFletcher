@@ -1,31 +1,7 @@
 const viewsRepositoryInstance = require("../repositories/views.repository.js");
+const userRepositoryInstance = require("../repositories/user.repository.js");
 
 class ViewsController {
-  async indexView(req, res) {
-    try {
-      const data = await viewsRepositoryInstance.dataView();
-
-      const newArray = data.map((p) => {
-        return {
-          title: p.title,
-          description: p.description,
-          price: p.price,
-          stock: p.stock,
-          code: p.code,
-          category: p.category,
-          status: p.status,
-          thumbnail: p.thumbnail,
-        };
-      });
-      res.render("index", { data: newArray });
-    } catch (error) {
-      res.status(500).send({
-        status: "error",
-        message: `Error: ${error.message}. error loading products`,
-      });
-    }
-  }
-
   async realTimeProducts(req, res) {
     const user = req.user.role;
     console.log("viewcontroller", user);
@@ -106,12 +82,8 @@ class ViewsController {
     }
   }
 
-  async register(req, res) {
-    res.render("register");
-  }
-
   async login(req, res) {
-    res.render("login");
+    res.render("login-register", { layout: "main" });
   }
 
   async resetPassword(req, res) {
@@ -135,6 +107,27 @@ class ViewsController {
   async upload(req, res) {
     const uid = req.params.uid;
     res.render("upload", { uid });
+  }
+
+  async getUsers(req, res) {
+    try {
+      const usersData = await userRepositoryInstance.getUsers();
+
+      const newArray = usersData.map((user) => {
+        return {
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          role: user.role,
+        };
+      });
+      res.render("users", { usersData: newArray });
+    } catch (error) {
+      res.status(500).send({
+        status: "error",
+        message: `Error: ${error.message}. error loading users`,
+      });
+    }
   }
 }
 

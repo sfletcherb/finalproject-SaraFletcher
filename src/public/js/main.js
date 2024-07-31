@@ -165,6 +165,12 @@ const updateProductList = (data) => {
   });
 };
 
+function showForm(formId) {
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("register").classList.add("hidden");
+  document.getElementById(formId).classList.remove("hidden");
+}
+
 // Get data by socket
 socket.on("updateProductList", updateProductList);
 // init Chat

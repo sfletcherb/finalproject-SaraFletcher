@@ -9,8 +9,10 @@
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
-    {{>header}}
-    {{{body}}}
-  </body>
+  <body class="{{bodyClass}}">
+  {{#if showHeader}}
+    {{> header }}
+  {{/if}}
+  {{{body}}}
+</body>
 </html>

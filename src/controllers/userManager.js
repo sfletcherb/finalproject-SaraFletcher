@@ -1,5 +1,5 @@
 const userRepositoryInstance = require("../repositories/user.repository.js");
-const UserDTO = require("../dto/user.dto.js");
+const createUsersListDTO = require("../dto/user.dto.js");
 const generateToken = require("../utils/jsonwebtoken.js");
 const UserModel = require("../models/user.model.js");
 const generateRandomToken = require("../utils/cryptotoken.js");
@@ -20,7 +20,7 @@ class UserController {
 
       res.cookie("ecommerceCookie", token, { maxAge: 3600000, httpOnly: true });
 
-      res.redirect("/login");
+      res.redirect("/login-register");
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
     }
@@ -47,27 +47,22 @@ class UserController {
 
       res.cookie("ecommerceCookie", token, { maxAge: 3600000, httpOnly: true });
 
-      res.redirect("/api/users/current");
+      res.redirect("/products");
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
     }
   }
 
   async current(req, res) {
-    if (!req.user) {
-      return res
-        .status(401)
-        .json({ message: "There is not user authenticated" });
+    try {
+      const users = await UserModel.find();
+      const usersListDTO = createUsersListDTO(users);
+      res.json(usersListDTO);
+    } catch (error) {
+      res
+        .status(500)
+        .send({ status: "error", message: "Error retrieving users" });
     }
-
-    const userData = new UserDTO(
-      req.user.first_name,
-      req.user.last_name,
-      req.user.role,
-      req.user.cart
-    );
-
-    res.status(200).json(userData);
   }
 
   async logout(req, res) {
@@ -78,7 +73,7 @@ class UserController {
       { $set: { last_connection: Date.now() } }
     );
     res.clearCookie("ecommerceCookie");
-    res.redirect("/login");
+    res.redirect("/login-register");
   }
 
   async resetPasswordRequest(req, res) {
@@ -155,7 +150,7 @@ class UserController {
         layout: "main",
         title: "Password Reset Success",
         message: "The password has been updated successfully.",
-        redirectUrl: "/login",
+        redirectUrl: "/login-register",
       });
     } catch (error) {
       return res
@@ -174,7 +169,7 @@ class UserController {
         layout: "main",
         title: "Role Change Success",
         message: "The role has been changed successfully.",
-        redirectUrl: "/login",
+        redirectUrl: "/login-register",
       });
     } catch (error) {
       console.error(error);

@@ -3,17 +3,19 @@ const router = express.Router();
 const passport = require("passport");
 const userControllerInstance = require("../controllers/userManager.js");
 const uploader = require("../middleware/uploadMulter.js");
+const verifyRole = require("../middleware/authMiddleware.js");
 
 // JWT
 // Register with JWT
 router.post("/", userControllerInstance.userRegister);
 
 // Login with JWT
-router.post("/login", userControllerInstance.userLogin);
+router.post("/login-register", userControllerInstance.userLogin);
 
 router.get(
   "/current",
   passport.authenticate("current", { session: false }),
+  verifyRole(["admin"]),
   userControllerInstance.current
 );
 
