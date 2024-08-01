@@ -13,10 +13,10 @@ router.post("/", userControllerInstance.userRegister);
 router.post("/login-register", userControllerInstance.userLogin);
 
 router.get(
-  "/current",
+  "/getAllUsers",
   passport.authenticate("current", { session: false }),
   verifyRole(["admin"]),
-  userControllerInstance.current
+  userControllerInstance.getAllUsers
 );
 
 router.post(
@@ -27,6 +27,8 @@ router.post(
 router.post("/password", userControllerInstance.password);
 
 router.post("/premium/:uid", userControllerInstance.changeRole);
+
+router.delete("/deleteUser/:uid", userControllerInstance.deleteUser);
 
 router.post(
   "/:uid/documents",

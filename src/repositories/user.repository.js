@@ -1,5 +1,6 @@
 const UserModel = require("../models/user.model.js");
 const { createHash, isValidPassword } = require("../utils/hashbcrypt.js");
+const mongoose = require("mongoose");
 
 class UserRepository {
   async userRegister(data) {
@@ -70,6 +71,15 @@ class UserRepository {
     try {
       const users = await UserModel.find();
       return users;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteUser(id) {
+    const objectId = new mongoose.Types.ObjectId(id);
+    try {
+      await UserModel.findByIdAndDelete(objectId);
     } catch (error) {
       throw new Error(error.message);
     }

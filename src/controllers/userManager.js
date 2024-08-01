@@ -5,6 +5,7 @@ const UserModel = require("../models/user.model.js");
 const generateRandomToken = require("../utils/cryptotoken.js");
 const emailControllerInstance = require("../controllers/emailManager.js");
 const { isValidPassword, createHash } = require("../utils/hashbcrypt.js");
+const mongoose = require("mongoose");
 
 class UserController {
   async userRegister(req, res) {
@@ -53,7 +54,7 @@ class UserController {
     }
   }
 
-  async current(req, res) {
+  async getAllUsers(req, res) {
     try {
       const users = await UserModel.find();
       const usersListDTO = createUsersListDTO(users);
@@ -208,6 +209,29 @@ class UserController {
     } catch (error) {
       console.error(error);
       res.status(500).send("Server internal error");
+    }
+  }
+
+  async deleteUser(req, res) {
+    const userId = req.params.uid;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res
+        .status(400)
+        .json({ success: false, error: "ID de usuario no válido" });
+    }
+    try {
+      const existUserId = await UserModel.findById(userId);
+      if (!existUserId) {
+        return res
+          .status(404)
+          .json({ success: false, error: "User not found" });
+      }
+      await userRepositoryInstance.deleteUser(userId);
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Server internal error" });
     }
   }
 }

@@ -1,7 +1,6 @@
 // Middleware to verify roles
 const verifyRole = (roles) => {
   return (req, res, next) => {
-    console.log("User in verifyRole middleware:", req.user);
     if (!req.user) {
       return res.status(401).json({ message: "User Unauthorized" });
     }

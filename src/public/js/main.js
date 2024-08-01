@@ -171,6 +171,31 @@ function showForm(formId) {
   document.getElementById(formId).classList.remove("hidden");
 }
 
+function deleteUser(userId) {
+  if (confirm("¿Are you sure you want delete the user?")) {
+    fetch(`/api/users/deleteUser/${userId}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error deleting user");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          document.getElementById(`user-row-${userId}`).remove();
+        } else {
+          alert("Error deleting user");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Error deleting user");
+      });
+  }
+}
+
 // Get data by socket
 socket.on("updateProductList", updateProductList);
 // init Chat

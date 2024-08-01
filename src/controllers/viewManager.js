@@ -115,10 +115,12 @@ class ViewsController {
 
       const newArray = usersData.map((user) => {
         return {
+          id: user._id,
           first_name: user.first_name,
           last_name: user.last_name,
           email: user.email,
           role: user.role,
+          last_connection: user.last_connection,
         };
       });
       res.render("users", { usersData: newArray });
