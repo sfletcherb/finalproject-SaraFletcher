@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const configObject = require("./config/dotenv.js");
+const cron = require("node-cron");
+const userRepositoryInstance = require("./repositories/user.repository.js");
 
 const { mongo_url } = configObject;
 
@@ -12,6 +14,13 @@ class DataBase {
     try {
       await mongoose.connect(mongo_url);
       console.log("Connected to MongoDB");
+      cron.schedule("0 0 * * *", async () => {
+        try {
+          await userRepositoryInstance.cleanUpInactiveUsers();
+        } catch (error) {
+          console.error("Error in user cleanup cron job:", error.message);
+        }
+      });
     } catch (error) {
       console.error("Failed to connect to MongoDB", error);
       throw error;

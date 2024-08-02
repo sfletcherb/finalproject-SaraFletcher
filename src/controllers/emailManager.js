@@ -77,6 +77,30 @@ class EmailController {
       console.error("Error sending email: ", error);
     }
   }
+
+  async deleteUserEmail(email) {
+    try {
+      const mailOptions = {
+        from: "ecommerce Test <saflebri@gmail.com>",
+        to: email,
+        subject: `Notificación de Eliminación de Cuenta por Inactividad`,
+        html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <p>Estimado usuario,</p>
+          <p>Nos dirigimos a ti para informarte que, debido a la falta de actividad en tu cuenta durante los últimos 2 días, hemos procedido a eliminarla de nuestra plataforma.</p>
+          <p>Si crees que esto es un error o si deseas reactivar tu cuenta, te invitamos a ponerte en contacto con nuestro equipo de soporte lo antes posible.</p>
+          <p>Estamos aquí para ayudarte y lamentamos cualquier inconveniente que esto pueda causarte.</p>
+          <p>Saludos cordiales,</p>
+          <p>El equipo de soporte de ecommerce Test</p>
+        </div>
+        `,
+      };
+
+      await transport.sendMail(mailOptions);
+    } catch (error) {
+      console.error("Error sending email: ", error);
+    }
+  }
 }
 
 const emailControllerInstance = new EmailController();

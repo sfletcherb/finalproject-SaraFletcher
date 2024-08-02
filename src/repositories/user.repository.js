@@ -1,6 +1,7 @@
 const UserModel = require("../models/user.model.js");
 const { createHash, isValidPassword } = require("../utils/hashbcrypt.js");
 const mongoose = require("mongoose");
+const emailControllerInstance = require("../controllers/emailManager.js");
 
 class UserRepository {
   async userRegister(data) {
@@ -80,6 +81,28 @@ class UserRepository {
     const objectId = new mongoose.Types.ObjectId(id);
     try {
       await UserModel.findByIdAndDelete(objectId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async cleanUpInactiveUsers() {
+    const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
+
+    try {
+      const inactiveUsers = await UserModel.find({
+        last_connection: { $lt: twoDaysAgo },
+      });
+
+      console.log(`Found ${inactiveUsers.length} inactive users.`);
+
+      for (const user of inactiveUsers) {
+        console.log(user.email);
+        await emailControllerInstance.deleteUserEmail(user.email);
+      }
+      await UserModel.deleteMany({ last_connection: { $lt: twoDaysAgo } });
+
+      console.log("Inactive users deleted");
     } catch (error) {
       throw new Error(error.message);
     }
