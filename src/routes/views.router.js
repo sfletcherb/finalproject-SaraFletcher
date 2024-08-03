@@ -45,4 +45,10 @@ router.get("/success", viewsControllerInstance.success);
 
 router.get("/upload/:uid", viewsControllerInstance.upload);
 
+router.get(
+  "/cart",
+  passport.authenticate("current", { session: false }),
+  viewsControllerInstance.showCart
+);
+
 module.exports = router;

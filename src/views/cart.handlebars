@@ -1,0 +1,26 @@
+<div class="container">
+  <h1>Resumen de la compra</h1>
+  <div class="cart-container">
+    {{#each cartById}}
+      <div class="cart-item">
+        <div class="cart-item-details">
+          <p><strong>Id del producto:</strong> {{this.id}}</p>
+          <p><strong>Nombre del producto:</strong> {{this.title}}</p>
+        </div>
+        <div class="cart-item-quantity">
+          <p><strong>Cantidad:</strong> {{this.quantity}}</p>
+        </div>
+        <div class="cart-item-price">
+          <p><strong>Precio:</strong> ${{this.price}}</p>
+        </div>
+      </div>
+    {{/each}}
+    <div class="cart-total">
+      <p><strong>Total: ${{total}}</strong></p>
+    </div>
+    <div class="cart-actions">
+      <a href="/products">Seguir comprando</a>
+      <a href="/api/cart/{{this.id}}/purchase">Confirmar compra</a>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 const userRepositoryInstance = require("../repositories/user.repository.js");
-const createUsersListDTO = require("../dto/user.dto.js");
+const { createUsersListDTO, UserDTO } = require("../dto/user.dto.js");
 const generateToken = require("../utils/jsonwebtoken.js");
 const UserModel = require("../models/user.model.js");
 const generateRandomToken = require("../utils/cryptotoken.js");
@@ -233,6 +233,24 @@ class UserController {
       console.error(error);
       res.status(500).json({ success: false, error: "Server internal error" });
     }
+  }
+
+  async current(req, res) {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ message: "There is not user authenticated" });
+    }
+
+    const userData = new UserDTO(
+      req.user.first_name,
+      req.user.last_name,
+      req.user.role,
+      req.user.email,
+      req.user.cart
+    );
+
+    res.status(200).json(userData);
   }
 }
 

@@ -1,67 +1,77 @@
-<p>Hola! {{user._doc.first_name}} {{user._doc.last_name}}, bienvenido(a), </p>
-<p>Datos de Usuario:</p>
-<p>Email: {{user._doc.email}}</p>
-<p>Edad: {{user._doc.age}}</p>
-<p>Role: {{user._doc.role}}</p>
+<div class="custom-body">
+    <p>Hola! {{user._doc.first_name}} {{user._doc.last_name}}, bienvenido(a), </p>
 
-<h1 class="main-title">Lista de productos</h1>
-{{#if prevLink}}
-  <a href="{{prevLink}}">Página Anterior</a>
-{{/if}}
+    <h1 class="main-title">Lista de productos</h1>
 
-{{#if nextLink}}
-  <a href="{{nextLink}}">Página Siguiente</a>
-{{/if}}
+    <div class="main-content">
+      <div class="sidebar">
+        <div class="filters">
+          <h2>Categorías</h2>
+          <a href="/products" class="filter-link">All</a>
+          <a href="/products?category=store" class="filter-link">Store</a>
+          <a href="/products?category=Medicamentos" class="filter-link">Medicamentos</a>
 
-<a href="/products?sort=asc&{{queryString}}">Ordenar Ascendente</a>
-<a href="/products?sort=desc&{{queryString}}">Ordenar Descendente</a>
-
-<h2>Categorías</h2>
-<a href="/products?category=store">Store</a>
-<a href="/products?category=Medicamentos">Medicamentos</a>
-
-<h2>Disponibilidad</h2>
-<a href="/products?stockIn={ $gt: 1 }">Disponible</a>
-<a href="/products?stockOut={ $eq: 0 }">No Disponible</a>
-
-<div class="container">
-  <div class="card-container">
-
-    {{#each payload}}
-      <div class="card">
-        <div class="card-body">
-          <p><strong>Id:</strong> {{this._id}}</p>
-          <p><strong>Nombre:</strong> {{this.title}}</p>
-          <p><strong>Descripción:</strong> {{this.description}}</p>
-          <p><strong>Precio:</strong> {{this.price}}</p>
-          <p><strong>Código:</strong> {{this.code}}</p>
-          <p><strong>Stock:</strong> {{this.stock}}</p>
-          <p><strong>Status:</strong> {{this.status}}</p>
-          <p><strong>Categoría:</strong> {{this.category}}</p>
-          <button
-            class="add-to-cart-btn"
-            data-product-id="{{this._id}}"
-            data-product-role={{../user._doc.role}}
-          >
-            Agregar al Carrito
-          </button>
+          <h2>Disponibilidad</h2>
+          <a href="/products?stockIn={ $gt: 1 }" class="filter-link">Disponible</a>
+          <a href="/products?stockOut={ $eq: 0 }" class="filter-link">No Disponible</a>
         </div>
       </div>
-    {{/each}}
+
+      <div class="main-section">
+        <div class="navigation">
+          {{#if prevLink}}
+            <a href="{{prevLink}}" class="nav-link">Página Anterior</a>
+          {{/if}}
+
+          {{#if nextLink}}
+            <a href="{{nextLink}}" class="nav-link">Página Siguiente</a>
+          {{/if}}
+
+          <a href="/products?sort=asc&{{queryString}}" class="sort-link">Ordenar Ascendente</a>
+          <a href="/products?sort=desc&{{queryString}}" class="sort-link">Ordenar Descendente</a>
+        </div>
+
+        <div class="container">
+          <div class="card-container">
+            {{#each payload}}
+              <div class="card">
+                <div class="card-body">
+                  <p><strong>Id:</strong> {{this._id}}</p>
+                  <p><strong>Nombre:</strong> {{this.title}}</p>
+                  <p><strong>Descripción:</strong> {{this.description}}</p>
+                  <p><strong>Precio:</strong> {{this.price}}</p>
+                  <p><strong>Código:</strong> {{this.code}}</p>
+                  <p><strong>Stock:</strong> {{this.stock}}</p>
+                  <p><strong>Status:</strong> {{this.status}}</p>
+                  <p><strong>Categoría:</strong> {{this.category}}</p>
+                  <button
+                    class="add-to-cart-btn"
+                    data-product-id="{{this._id}}"
+                    data-product-role={{../user._doc.role}}
+                  >
+                    Agregar al Carrito
+                  </button>
+                  <span class="access-denied-message" style="display:none; color: red;">Access Denied</span>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="pagination">
+          {{#if hasPrevPage}}
+            <a href="/products?page={{prevPage}}" class="pagination-link prev-page-link">Previous</a>
+          {{/if}}
+
+          {{#if hasNextPage}}
+            <a href="/products?page={{nextPage}}" class="pagination-link next-page-link">Next</a>
+          {{/if}}
+
+          <p class="page-info">Page {{page}} of {{totalPages}}</p>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-
-{{#if hasPrevPage}}
-  <a href="/products?page={{prevPage}}">Previous</a>
-{{/if}}
-
-{{#if hasNextPage}}
-  <a href="/products?page={{nextPage}}">Next</a>
-{{/if}}
-
-<p>Page {{page}} of {{totalPages}}</p>
-
-<a href="/api/users/logout" class="btn btn-card">logout</a>
 
 {{! traer las funciones y metodos de socket.io }}
 <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>

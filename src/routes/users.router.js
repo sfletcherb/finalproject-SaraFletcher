@@ -42,4 +42,10 @@ router.all(
   userControllerInstance.logout
 );
 
+router.get(
+  "/current",
+  passport.authenticate("current", { session: false }),
+  userControllerInstance.current
+);
+
 module.exports = router;

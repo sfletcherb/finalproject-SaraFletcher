@@ -36,7 +36,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       const quantity = 1;
 
       if (roleType !== "user") {
-        console.log("Access denied");
+        const accessDeniedMessage = button.nextElementSibling;
+        accessDeniedMessage.style.display = "block";
+        button.classList.add("disabled");
         button.disabled = true;
         return;
       }

@@ -1,5 +1,7 @@
 const viewsRepositoryInstance = require("../repositories/views.repository.js");
 const userRepositoryInstance = require("../repositories/user.repository.js");
+const userControllerInstance = require("./userManager.js");
+const cartRepositoryInstance = require("../repositories/carts.repository.js");
 
 class ViewsController {
   async realTimeProducts(req, res) {
@@ -128,6 +130,39 @@ class ViewsController {
       res.status(500).send({
         status: "error",
         message: `Error: ${error.message}. error loading users`,
+      });
+    }
+  }
+
+  async showCart(req, res) {
+    try {
+      const user = req.user.cart;
+
+      const cartById = await cartRepositoryInstance.getCartById(user);
+
+      if (!cartById) {
+        throw new Error("Cart not found");
+      }
+
+      const newArray = cartById.map((cart) => {
+        return {
+          id: cart.product._id,
+          title: cart.product.title,
+          price: cart.product.price,
+          quantity: cart.quantity,
+        };
+      });
+
+      const total = newArray.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
+
+      res.render("cart", { cartById: newArray, total: total.toFixed(2) });
+    } catch (error) {
+      res.status(500).send({
+        status: "error",
+        message: `Error: ${error.message}. error loading cart`,
       });
     }
   }

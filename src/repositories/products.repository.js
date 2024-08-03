@@ -75,6 +75,10 @@ class ProductRepository {
 
   async updateProduct(id, changes) {
     try {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new Error("Invalid ObjectId format");
+      }
+
       const objectId = mongoose.Types.ObjectId.createFromHexString(id);
 
       await ProductModel.findByIdAndUpdate(objectId, changes);

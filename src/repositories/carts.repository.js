@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const CartModel = require("../models/carts.model.js");
 
 class CartRepository {
@@ -25,6 +26,9 @@ class CartRepository {
 
   async getCartById(id) {
     try {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new Error("Invalid ObjectId");
+      }
       const cartById = await CartModel.findById(id);
       return cartById.products;
     } catch (error) {
