@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="/css/style.css" />
+
+<div class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Ticket Details</h2>
+    </div>
+    <div class="modal-body">
+      <p><strong>Amount:</strong> ${{amount}}</p>
+      <p><strong>Code:</strong> {{code}}</p>
+      <p><strong>ID:</strong> {{id}}</p>
+    </div>
+    <form action="/mail" method:"POST">
+      <button type="submit">Finalizar compra</button>
+    </form>
+  </div>
+</div>
+
+

@@ -10,12 +10,12 @@ class TicketController {
   }
 
   async createTicket(req, res) {
+    if (!req.user) {
+      throw new Error("User is not authenticated");
+    }
     const userEmail = req.user.email;
     const userCartId = req.user.cart;
-    console.log("User Email:", userEmail);
-    console.log("User Cart ID:", userCartId);
 
-    // Validar el ObjectId antes de usarlo
     if (!mongoose.Types.ObjectId.isValid(userCartId)) {
       return res
         .status(400)
@@ -25,22 +25,17 @@ class TicketController {
     try {
       const cartById = await cartRepositoryInstance.getCartById(userCartId);
       if (!cartById) {
-        console.log("Cart not found for ID:", userCartId);
         return res
           .status(404)
           .json({ status: "error", message: "Cart not found" });
       }
-      console.log("Cart Retrieved:", cartById);
 
       const productById = await productRepositoryInstance.getAllProducts();
-      console.log("Products Retrieved:", productById);
 
       const { total, purchaseUncompleted } = await this.processTicket(
         cartById,
         productById
       );
-      console.log("Total:", total);
-      console.log("Purchase Uncompleted:", purchaseUncompleted);
 
       // Filter products not purchased and update cart
       const productsNotPurchased = cartById.filter((item) => {
@@ -51,7 +46,7 @@ class TicketController {
       console.log("Products Not Purchased:", productsNotPurchased);
 
       await cartRepositoryInstance.deleteAllProductsCart(userCartId);
-      console.log("Cart Products Deleted");
+
       await cartRepositoryInstance.updateProductCartWithArray(
         userCartId,
         productsNotPurchased
@@ -62,25 +57,23 @@ class TicketController {
         userEmail,
         total
       );
-      console.log("New Ticket Created:", newTicket);
 
-      res.status(200).json(newTicket);
+      res.render("ticket", {
+        amount: newTicket.amount,
+        code: newTicket.code,
+        id: newTicket._id,
+      });
     } catch (error) {
       res.status(500).send({ status: "error", message: error.message });
     }
   }
 
   async processTicket(cartItems, products) {
-    console.log("Processing Ticket");
-    console.log("Cart Items:", cartItems);
-    console.log("Products:", products);
-
     let total = 0;
     let purchaseUncompleted = [];
 
     try {
       for (const item of cartItems) {
-        console.log("Processing Item:", item);
         if (item.product?.price && item.quantity) {
           const dataProduct = products.find(
             (product) => product._id.toString() === item.product._id.toString()
@@ -111,8 +104,7 @@ class TicketController {
       console.error("Error in processTicket:", error);
       throw error; // Re-throw to be caught by the caller
     }
-    console.log("Total:", total);
-    console.log("Purchase Uncompleted:", purchaseUncompleted);
+
     return { total, purchaseUncompleted };
   }
 }

@@ -16,13 +16,14 @@ const transport = nodemailer.createTransport({
 class EmailController {
   async sendEmail(req, res) {
     const user = req.user;
+    const email = user.email;
 
     try {
-      const dataTicket = await ticketRepositoryInstance.getTicket(user.email);
+      const dataTicket = await ticketRepositoryInstance.getTicket(email);
 
       await transport.sendMail({
         from: "ecommerce Test <saflebri@gmail.com>",
-        to: "saflebri@hotmail.com",
+        to: email,
         subject: `Confirmación de orden No. ${dataTicket.code}`,
         html: ` <div class="container">
         <div class="header">
@@ -49,7 +50,12 @@ class EmailController {
           cid: "logo1"
         }] */
       });
-      res.send("email sent correctly");
+      res.render("success", {
+        layout: "main",
+        title: "Purchase Success",
+        message: "The purchase has been done successfully.",
+        redirectUrl: "/products",
+      });
     } catch (error) {
       res.status(500).send("error sending email purchase");
     }

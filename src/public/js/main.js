@@ -33,12 +33,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     button.addEventListener("click", async function () {
       const productId = button.getAttribute("data-product-id");
       const roleType = button.getAttribute("data-product-role");
-      const quantity = 1;
+      const quantityInput = document.querySelector(
+        `.quantity-input[data-product-id="${productId}"]`
+      );
+      const quantity = parseInt(quantityInput.value, 10);
 
       if (roleType !== "user") {
-        const accessDeniedMessage = button.nextElementSibling;
-        accessDeniedMessage.style.display = "block";
-        button.classList.add("disabled");
+        console.log("Access denied");
         button.disabled = true;
         return;
       }
@@ -72,48 +73,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   });
 });
-
-// Create Chat
-
-//Save user variable
-let user;
-
-const initChat = () => {
-  //We use Swal object and method is Fire
-  Swal.fire({
-    title: "Identificate",
-    input: "text",
-    text: "Ingrese un usuario para identificarse en el chat",
-    inputValidator: (value) => {
-      return !value && "Necesitas escribir un nombre para continuar";
-    },
-    allowOutsideClick: false,
-  }).then((result) => {
-    user = result.value;
-    console.log(user);
-  });
-
-  const chatBox = document.getElementById("chatBox");
-  chatBox.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
-      if (chatBox.value.trim().length > 0) {
-        socket.emit("message", { user: user, message: chatBox.value });
-        chatBox.value = "";
-      }
-    }
-  });
-
-  //We received messages and they show on screen
-  socket.on("message", (data) => {
-    let log = document.getElementById("messagesLogs");
-    let mensajes = "";
-    data.forEach((mensaje) => {
-      mensajes = mensajes + `${mensaje.user} dice: ${mensaje.message} <br>`;
-    });
-    log.innerHTML = mensajes;
-  });
-};
-
 const updateProductList = (data) => {
   const listProducts = document.getElementById("list-products");
   listProducts.innerHTML = "";
@@ -201,4 +160,3 @@ function deleteUser(userId) {
 // Get data by socket
 socket.on("updateProductList", updateProductList);
 // init Chat
-initChat();

@@ -18,7 +18,7 @@ router.put("/:cid/products/:pid", cartControllerInstance.updateProductCart);
 router.put("/:cid", cartControllerInstance.updateProductCartWithArray);
 router.delete("/:cid/products/:pid", cartControllerInstance.deleteProductCart);
 router.delete("/:cid", cartControllerInstance.deleteAllProductsCart);
-router.get(
+router.post(
   "/:cid/purchase",
   passport.authenticate("current", { session: false }),
   verifyRole(["admin", "user"]),

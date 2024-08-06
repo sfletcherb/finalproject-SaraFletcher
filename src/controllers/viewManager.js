@@ -1,7 +1,7 @@
 const viewsRepositoryInstance = require("../repositories/views.repository.js");
 const userRepositoryInstance = require("../repositories/user.repository.js");
-const userControllerInstance = require("./userManager.js");
 const cartRepositoryInstance = require("../repositories/carts.repository.js");
+const ticketControllerInstance = require("../controllers/ticketManager.js");
 
 class ViewsController {
   async realTimeProducts(req, res) {
@@ -136,9 +136,9 @@ class ViewsController {
 
   async showCart(req, res) {
     try {
-      const user = req.user.cart;
+      const cartId = req.user.cart;
 
-      const cartById = await cartRepositoryInstance.getCartById(user);
+      const cartById = await cartRepositoryInstance.getCartById(cartId);
 
       if (!cartById) {
         throw new Error("Cart not found");
@@ -158,12 +158,29 @@ class ViewsController {
         0
       );
 
-      res.render("cart", { cartById: newArray, total: total.toFixed(2) });
+      res.render("cart", {
+        cartById: newArray,
+        total: total.toFixed(2),
+        cartId,
+      });
     } catch (error) {
       res.status(500).send({
         status: "error",
         message: `Error: ${error.message}. error loading cart`,
       });
+    }
+  }
+
+  async renderTicket(req, res) {
+    try {
+      const ticket = await ticketControllerInstance.createTicket(req);
+      res.render("ticket", {
+        amount: ticket.amount,
+        code: ticket.code,
+        id: ticket._id,
+      });
+    } catch (error) {
+      res.status(500).send({ status: "error", message: error.message });
     }
   }
 }

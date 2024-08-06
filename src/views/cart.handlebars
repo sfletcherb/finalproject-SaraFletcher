@@ -1,4 +1,4 @@
-<div class="container">
+<div class="summary-container">
   <h1>Resumen de la compra</h1>
   <div class="cart-container">
     {{#each cartById}}
@@ -20,7 +20,9 @@
     </div>
     <div class="cart-actions">
       <a href="/products">Seguir comprando</a>
-      <a href="/api/cart/{{this.id}}/purchase">Confirmar compra</a>
+      <form action="/api/carts/{{cartId}}/purchase" method="POST">
+        <button type="submit">Confirmar compra</button>
+      </form>
     </div>
   </div>
 </div>
