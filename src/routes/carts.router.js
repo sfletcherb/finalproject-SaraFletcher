@@ -21,7 +21,7 @@ router.delete("/:cid", cartControllerInstance.deleteAllProductsCart);
 router.post(
   "/:cid/purchase",
   passport.authenticate("current", { session: false }),
-  verifyRole(["admin", "user"]),
+  verifyRole(["user"]),
   ticketControllerInstance.createTicket
 );
 module.exports = router;

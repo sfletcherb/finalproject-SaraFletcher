@@ -37,10 +37,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         `.quantity-input[data-product-id="${productId}"]`
       );
       const quantity = parseInt(quantityInput.value, 10);
+      const messageElement = this.nextElementSibling;
 
       if (roleType !== "user") {
         console.log("Access denied");
         button.disabled = true;
+        messageElement.style.display = "inline";
         return;
       }
 
