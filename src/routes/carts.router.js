@@ -11,7 +11,7 @@ router.get("/:cid", cartControllerInstance.getCartById);
 router.post(
   "/:cid/product/:pid",
   passport.authenticate("current", { session: false }),
-  verifyRole(["user"]),
+  verifyRole(["user", "premium"]),
   cartControllerInstance.addProductToCart
 );
 router.put("/:cid/products/:pid", cartControllerInstance.updateProductCart);
@@ -21,7 +21,7 @@ router.delete("/:cid", cartControllerInstance.deleteAllProductsCart);
 router.post(
   "/:cid/purchase",
   passport.authenticate("current", { session: false }),
-  verifyRole(["user"]),
+  verifyRole(["user", "premium"]),
   ticketControllerInstance.createTicket
 );
 module.exports = router;

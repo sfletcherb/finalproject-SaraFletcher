@@ -53,7 +53,8 @@ class EmailController {
       res.render("success", {
         layout: "main",
         title: "Purchase Success",
-        message: "The purchase has been done successfully.",
+        message:
+          "Your purchase has been completed successfully. Please check your email",
         redirectUrl: "/products",
       });
     } catch (error) {

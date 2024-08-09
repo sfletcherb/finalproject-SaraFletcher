@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const quantity = parseInt(quantityInput.value, 10);
       const messageElement = this.nextElementSibling;
 
-      if (roleType !== "user") {
+      if (roleType !== "user" && roleType !== "premium") {
         console.log("Access denied");
         button.disabled = true;
         messageElement.style.display = "inline";

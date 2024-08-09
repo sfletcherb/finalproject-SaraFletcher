@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  if (this.role === "user" && !this.cart) {
+  if ((this.role === "user" || this.role === "premium") && !this.cart) {
     try {
       const cart = await cartServiceInstance.createCart();
       this.cart = cart._id;

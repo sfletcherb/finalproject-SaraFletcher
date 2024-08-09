@@ -7,7 +7,7 @@ const emailControllerInstance = require("../controllers/emailManager.js");
 router.get(
   "/mail",
   passport.authenticate("current", { session: false }),
-  verifyRole(["admin", "user"]),
+  verifyRole(["admin", "user", "premium"]),
   emailControllerInstance.sendEmail
 );
 

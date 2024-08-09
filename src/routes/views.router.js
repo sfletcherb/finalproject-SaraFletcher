@@ -48,7 +48,7 @@ router.get("/upload/:uid", viewsControllerInstance.upload);
 router.get(
   "/cart",
   passport.authenticate("current", { session: false }),
-  verifyRole(["user"]),
+  verifyRole(["user", "premium"]),
   viewsControllerInstance.showCart
 );
 
