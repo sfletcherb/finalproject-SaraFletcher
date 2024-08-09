@@ -14,6 +14,7 @@ const configObject = {
   nodemailer_user: process.env.EMAIL_USER,
   nodemailer_password: process.env.EMAIL_PASS,
   node_env: process.env.NODE_ENV,
+  port: process.env.PORT,
 };
 
 module.exports = configObject;

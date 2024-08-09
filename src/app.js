@@ -21,7 +21,7 @@ const cors = require("cors");
 const { setBodyClass, showHeader } = require("./middleware/pageMiddleware.js");
 
 const app = express();
-const PUERTO = 8080;
+const PUERTO = process.env.PORT || 8080;
 
 //Set up Express Handlebars
 app.engine("handlebars", exphbs.engine());
