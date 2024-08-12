@@ -36,8 +36,8 @@ class EmailController {
             <p><strong>Fecha pedido:</strong>${dataTicket.purchase_datetime}</p>
             <p><strong>Total:</strong> $ ${dataTicket.amount}</p>
             <p>Si tienes alguna pregunta o necesitas asistencia, no dudes en <a href="">contactarnos</a>.</p>
-            <p>Puedes revisar el estado de tu pedido en cualquier momento haciendo clic en el siguiente botón:</p>
-            <a href="" class="">Ver mi Pedido</a>
+            
+            
         </div>
         <div class="">
             <p>&copy; 2024 Ecommerce. Todos los derechos reservados.</p>
