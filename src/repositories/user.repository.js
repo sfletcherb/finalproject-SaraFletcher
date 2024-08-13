@@ -78,7 +78,6 @@ class UserRepository {
   }
 
   async deleteUser(id) {
-    const objectId = new mongoose.Types.ObjectId(id);
     try {
       await UserModel.findByIdAndDelete(objectId);
     } catch (error) {
@@ -98,9 +97,15 @@ class UserRepository {
 
       for (const user of inactiveUsers) {
         console.log(user.email);
-        await emailControllerInstance.deleteUserEmail(user.email);
+        if (user.role !== "admin") {
+          await emailControllerInstance.deleteUserEmail(user.email);
+        }
       }
-      await UserModel.deleteMany({ last_connection: { $lt: twoDaysAgo } });
+
+      await UserModel.deleteMany({
+        last_connection: { $lt: twoDaysAgo },
+        role: { $ne: "admin" },
+      });
 
       console.log("Inactive users deleted");
     } catch (error) {
